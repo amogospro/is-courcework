@@ -195,7 +195,7 @@ interface Pageable {
   unpaged: boolean;
 }
 
-interface Response<T> {
+export interface Response<T> {
   content: T;
   pageable: Pageable;
   last: boolean;

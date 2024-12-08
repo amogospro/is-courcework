@@ -1,18 +1,14 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
-  import type { Patient } from '$lib/types';
   import Pencil from 'svelte-radix/Pencil1.svelte';
   import Trash from 'svelte-radix/Trash.svelte';
-  import { toast } from 'svelte-sonner';
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-  import { updatePatient } from '$lib/api';
-  import PatientForm from './patient-form.svelte';
-  export let data: Patient;
+  import { ComponentRenderConfig, Render } from 'svelte-render';
 
-  export let id: string;
+  type FormComponent = $$Generic<SvelteComponent>;
+  export let update_form: ComponentRenderConfig<FormComponent>;
   export let onDelete: () => {};
-  export let onUpdate: () => {};
 </script>
 
 <div class="gap-10px flex items-center justify-items-center">
@@ -41,14 +37,7 @@
       </Button>
     </Dialog.Trigger>
     <Dialog.Content class="w-full max-w-[1500px]">
-      <PatientForm
-        {data}
-        onSubmit={async (data) => {
-          await updatePatient(data);
-          toast.info('Product updated');
-          onUpdate();
-        }}
-      />
+      <Render of={update_form} />
     </Dialog.Content>
   </Dialog.Root>
 </div>
