@@ -15,7 +15,7 @@ public class UserRole {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "userid", nullable = false)
-    private User userid;
+    private Userprofile userid;
 
     @MapsId("roleid")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -31,11 +31,11 @@ public class UserRole {
         this.id = id;
     }
 
-    public User getUserid() {
+    public Userprofile getUserid() {
         return userid;
     }
 
-    public void setUserid(User userid) {
+    public void setUserid(Userprofile userid) {
         this.userid = userid;
     }
 

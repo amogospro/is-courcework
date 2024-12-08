@@ -8,18 +8,18 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.Instant;
 
 @Entity
-@Table(name = "\"User\"")
-public class User {
+@Table(name = "userprofile")
+public class Userprofile {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "User_id_gen")
-    @SequenceGenerator(name = "User_id_gen", sequenceName = "User_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userprofile_id_gen")
+    @SequenceGenerator(name = "userprofile_id_gen", sequenceName = "userprofile_id_seq", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "personid", nullable = false)
-    private com.amogus.server.models.Person personid;
+    private Person personid;
 
     @Column(name = "username", nullable = false, length = Integer.MAX_VALUE)
     private String username;
@@ -39,11 +39,11 @@ public class User {
         this.id = id;
     }
 
-    public com.amogus.server.models.Person getPersonid() {
+    public Person getPersonid() {
         return personid;
     }
 
-    public void setPersonid(com.amogus.server.models.Person personid) {
+    public void setPersonid(Person personid) {
         this.personid = personid;
     }
 

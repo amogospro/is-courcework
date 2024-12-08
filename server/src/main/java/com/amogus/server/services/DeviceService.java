@@ -3,6 +3,8 @@ package com.amogus.server.services;
 import com.amogus.server.models.Device;
 import com.amogus.server.repositories.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,23 +20,35 @@ public class DeviceService {
         this.deviceRepository = deviceRepository;
     }
 
-    // Create or update a device
-    public Device saveDevice(Device device) {
+    public Page<Device> getAllDevices(Pageable pageable) {
+        return deviceRepository.findAll(pageable);
+    }
+
+    public Device createDevice(Device device) {
         return deviceRepository.save(device);
     }
 
-    // Get all devices
-    public List<Device> getAllDevices() {
-        return deviceRepository.findAll();
+    public Device updateDevice(Integer id, Device deviceDetails) {
+        return deviceRepository.findById(id)
+                .map(device -> {
+                    device.setDevicesn(deviceDetails.getDevicesn());
+                    device.setStatus(deviceDetails.getStatus());
+                    device.setLocation(deviceDetails.getLocation());
+                    return deviceRepository.save(device);
+                })
+                .orElseThrow(() -> new RuntimeException("Device not found with id " + id));
     }
 
-    // Get a device by its ID
-    public Optional<Device> getDeviceById(Integer id) {
-        return deviceRepository.findById(id);
-    }
-
-    // Delete a device by its ID
     public void deleteDevice(Integer id) {
         deviceRepository.deleteById(id);
+    }
+
+
+    public Device getDeviceById(Integer id) {
+        return deviceRepository.findById(id).orElse(null); // Fetch by ID, return null if not found
+    }
+
+    public Device updateDevice(Device device) {
+        return deviceRepository.save(device);
     }
 }

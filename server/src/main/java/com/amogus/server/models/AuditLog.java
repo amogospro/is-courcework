@@ -18,7 +18,7 @@ public class AuditLog {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "userid", nullable = false)
-    private User userid;
+    private Userprofile userid;
 
     @Column(name = "entity", nullable = false, length = Integer.MAX_VALUE)
     private String entity;
@@ -43,11 +43,11 @@ public class AuditLog {
         this.id = id;
     }
 
-    public User getUserid() {
+    public Userprofile getUserid() {
         return userid;
     }
 
-    public void setUserid(User userid) {
+    public void setUserid(Userprofile userid) {
         this.userid = userid;
     }
 

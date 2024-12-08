@@ -14,17 +14,17 @@ public class Study {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "patientid", nullable = false)
     private Patient patient;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "userid", nullable = false)
-    private User user;
+    private Userprofile user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "deviceid", nullable = false)
     private Device device;
@@ -48,15 +48,15 @@ public class Study {
         return patient;
     }
 
-    public void setPatient(Patient patientid) {
-        this.patient = patientid;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
-    public User getUser() {
+    public Userprofile getUser() {
         return user;
     }
 
-    public void setUser(User userid) {
+    public void setUser(Userprofile userid) {
         this.user = userid;
     }
 

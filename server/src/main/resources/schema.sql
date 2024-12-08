@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS Device;
 DROP TABLE IF EXISTS Patient;
 DROP TABLE IF EXISTS UserRole;
 DROP TABLE IF EXISTS Role;
-DROP TABLE IF EXISTS "User";
+DROP TABLE IF EXISTS UserProfile;
 DROP TABLE IF EXISTS Person;
 DROP TYPE IF EXISTS GenderEnum CASCADE;
 DROP TYPE IF EXISTS DeviceStatusEnum CASCADE;
@@ -16,8 +16,13 @@ DROP TYPE IF EXISTS ActionTypeEnum CASCADE;
 -- Create ENUM types
 CREATE TYPE GenderEnum AS ENUM ('M', 'F', 'O');
 CREATE CAST (CHARACTER VARYING as GenderEnum) WITH INOUT AS IMPLICIT;
+
 CREATE TYPE DeviceStatusEnum AS ENUM ('Работает', 'Неисправно', 'В обслуживании');
+CREATE CAST (CHARACTER VARYING as DeviceStatusEnum) WITH INOUT AS IMPLICIT;
+
 CREATE TYPE ActionTypeEnum AS ENUM ('Создание', 'Изменение', 'Удаление', 'Вход', 'Выход');
+CREATE CAST (CHARACTER VARYING as ActionTypeEnum) WITH INOUT AS IMPLICIT;
+
 -- Create the Person table
 CREATE TABLE Person
 (
@@ -32,7 +37,7 @@ CREATE TABLE Person
     Address     VARCHAR        NOT NULL
 );
 -- Create the User table
-CREATE TABLE "User"
+CREATE TABLE UserProfile
 (
     ID             SERIAL PRIMARY KEY,
     PersonID       INTEGER        NOT NULL UNIQUE REFERENCES Person (ID) ON DELETE CASCADE,
@@ -50,7 +55,7 @@ CREATE TABLE Role
 -- Create the UserRole table (Many-to-Many relationship between User and Role)
 CREATE TABLE UserRole
 (
-    UserID INTEGER NOT NULL REFERENCES "User" (ID) ON DELETE CASCADE,
+    UserID INTEGER NOT NULL REFERENCES UserProfile (ID) ON DELETE CASCADE,
     RoleID INTEGER NOT NULL REFERENCES Role (ID) ON DELETE CASCADE,
     PRIMARY KEY (UserID, RoleID)
 );
@@ -74,7 +79,7 @@ CREATE TABLE Study
 (
     ID        SERIAL PRIMARY KEY,
     PatientID INTEGER     NOT NULL REFERENCES Patient (ID) ON DELETE CASCADE,
-    UserID    INTEGER     NOT NULL REFERENCES "User" (ID) ON DELETE SET NULL, -- User who performed the study
+    UserID    INTEGER     NOT NULL REFERENCES UserProfile (ID) ON DELETE SET NULL, -- User who performed the study
     DeviceID  INTEGER     NOT NULL REFERENCES Device (ID) ON DELETE SET NULL,
     Status    VARCHAR(20) NOT NULL DEFAULT 'Planned',
     CONSTRAINT chk_status CHECK (Status IN ('Planned', 'Canceled', 'Successed')),
@@ -85,7 +90,7 @@ CREATE TABLE DeviceComment
 (
     ID          SERIAL PRIMARY KEY,
     DeviceID    INTEGER   NOT NULL REFERENCES Device (ID) ON DELETE CASCADE,
-    UserID      INTEGER   NOT NULL REFERENCES "User" (ID) ON DELETE CASCADE,
+    UserID      INTEGER   NOT NULL REFERENCES UserProfile (ID) ON DELETE CASCADE,
     CommentText TEXT      NOT NULL,
     Timestamp   TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -96,14 +101,14 @@ CREATE TABLE Schedule
     StartTime         TIMESTAMP NOT NULL,
     EndTime           TIMESTAMP NOT NULL,
     StudyID           INTEGER   NOT NULL REFERENCES Study (ID) ON DELETE SET NULL,
-    ScheduledByUserID INTEGER   NOT NULL REFERENCES "User" (ID) ON DELETE CASCADE,
+    ScheduledByUserID INTEGER   NOT NULL REFERENCES UserProfile (ID) ON DELETE CASCADE,
     Comments          TEXT
 );
 -- Create the AuditLog table
 CREATE TABLE AuditLog
 (
     ID         SERIAL PRIMARY KEY,
-    UserID     INTEGER        NOT NULL REFERENCES "User" (ID) ON DELETE CASCADE,
+    UserID     INTEGER        NOT NULL REFERENCES UserProfile (ID) ON DELETE CASCADE,
     ActionType ActionTypeEnum NOT NULL,
     Entity     VARCHAR        NOT NULL,
     EntityID   INTEGER        NOT NULL,

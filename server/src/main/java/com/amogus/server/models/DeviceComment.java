@@ -24,7 +24,7 @@ public class DeviceComment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "userid", nullable = false)
-    private User userid;
+    private Userprofile userid;
 
     @Column(name = "commenttext", nullable = false, length = Integer.MAX_VALUE)
     private String commenttext;
@@ -49,11 +49,11 @@ public class DeviceComment {
         this.deviceid = deviceid;
     }
 
-    public User getUserid() {
+    public Userprofile getUserid() {
         return userid;
     }
 
-    public void setUserid(User userid) {
+    public void setUserid(Userprofile userid) {
         this.userid = userid;
     }
 

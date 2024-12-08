@@ -17,7 +17,7 @@ VALUES
     ('Техперсонал', 'Технический персонал');
 -- Заполнение таблицы User
 -- Предполагается, что ID пользователей в таблице Person начинаются с 1
-INSERT INTO "User" (PersonID, Username, PasswordHash, DateRegistered)
+INSERT INTO UserProfile (PersonID, Username, PasswordHash, DateRegistered)
 VALUES
     (1, 'ivanov', 'hashed_password1', NOW()),
     (2, 'petrova', 'hashed_password2', NOW()),

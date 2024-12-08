@@ -24,12 +24,12 @@ public class Schedule {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "studyid", nullable = false)
-    private com.amogus.server.models.Study studyid;
+    private Study studyid;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "scheduledbyuserid", nullable = false)
-    private User scheduledbyuserid;
+    private Userprofile scheduledbyuserid;
 
     @Column(name = "comments", length = Integer.MAX_VALUE)
     private String comments;
@@ -66,11 +66,11 @@ public class Schedule {
         this.studyid = studyid;
     }
 
-    public User getScheduledbyuserid() {
+    public Userprofile getScheduledbyuserid() {
         return scheduledbyuserid;
     }
 
-    public void setScheduledbyuserid(User scheduledbyuserid) {
+    public void setScheduledbyuserid(Userprofile scheduledbyuserid) {
         this.scheduledbyuserid = scheduledbyuserid;
     }
 

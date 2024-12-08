@@ -1,8 +1,6 @@
 import { z } from 'zod';
 
 export const Gender = z.enum(['M', 'F', 'O']);
-
-
 export const PersonSchema = z.object({
   id: z.number().int().nonnegative().optional(), // id should be an integer and non-negative
   firstname: z.string().min(1), // Required string, must have at least 1 character
@@ -22,3 +20,12 @@ export const PatientSchema = z.object({
   insurancepolicynumber: z.string().min(1).optional() // Optional insurance policy number
 });
 export type Patient = z.infer<typeof PatientSchema>;
+
+export const DeviceStatus = z.enum(['Работает', 'Неисправно', 'В обслуживании']);
+export const DeviceSchema = z.object({
+  id: z.number().int().nonnegative().optional(), // id should be an integer and non-negative
+  devicesn: z.string().min(1), // Required string, must have at least 1 character
+  location: z.string().min(1), // Required string, must have at least 1 character
+  status: DeviceStatus // Required string for gender
+});
+export type Device = z.infer<typeof DeviceSchema>;

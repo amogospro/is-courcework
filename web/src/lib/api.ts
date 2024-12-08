@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'svelte-sonner';
 import { writable } from 'svelte/store';
-import type { Patient } from './types';
+import type { Device, Patient } from './types';
 // import type { Organization, Person, Product, ProductEdit } from './types';
 // import ReconnectingWebSocket from 'reconnecting-websocket';
 // import { Subject } from 'rxjs';
@@ -237,6 +237,29 @@ export const getPatients = async (q = new URLSearchParams()) => {
   return data;
 };
 
+export const createDevice = async (Device: Device) => {
+  const { data } = await api.post<Device>(`/devices`, Device);
+  console.log(data);
+  return data;
+};
+
+export const updateDevice = async (Device: Device) => {
+  const { data } = await api.put<Device>(`/devices/${Device.id}`, Device);
+  console.log(data);
+  return data;
+};
+
+export const deleteDevice = async (id: number) => {
+  const { data } = await api.delete<Device>(`/devices/${id}`);
+  console.log(data);
+  return data;
+};
+
+export const getDevices = async (q = new URLSearchParams()) => {
+  const { data } = await api.get<Response<Device[]>>(`/devices?${q}`);
+  console.log(data);
+  return data;
+};
 // export const deletePatient = async (id: number | string) => {
 //   const { data } = await api.delete(`/products/${id}`);
 //   console.log(data);
