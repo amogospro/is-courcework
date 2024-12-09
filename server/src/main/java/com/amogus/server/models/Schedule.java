@@ -21,15 +21,15 @@ public class Schedule {
     @Column(name = "endtime", nullable = false)
     private Instant endtime;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "studyid", nullable = false)
-    private Study studyid;
+    private Study study;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "scheduledbyuserid", nullable = false)
-    private Userprofile scheduledbyuserid;
+    private Userprofile scheduledbyuser;
 
     @Column(name = "comments", length = Integer.MAX_VALUE)
     private String comments;
@@ -58,20 +58,20 @@ public class Schedule {
         this.endtime = endtime;
     }
 
-    public com.amogus.server.models.Study getStudyid() {
-        return studyid;
+    public com.amogus.server.models.Study getStudy() {
+        return study;
     }
 
-    public void setStudyid(com.amogus.server.models.Study studyid) {
-        this.studyid = studyid;
+    public void setStudy(com.amogus.server.models.Study studyid) {
+        this.study = studyid;
     }
 
-    public Userprofile getScheduledbyuserid() {
-        return scheduledbyuserid;
+    public Userprofile getScheduledbyuser() {
+        return scheduledbyuser;
     }
 
-    public void setScheduledbyuserid(Userprofile scheduledbyuserid) {
-        this.scheduledbyuserid = scheduledbyuserid;
+    public void setScheduledbyuser(Userprofile scheduledbyuserid) {
+        this.scheduledbyuser = scheduledbyuserid;
     }
 
     public String getComments() {

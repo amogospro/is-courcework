@@ -40,24 +40,24 @@ VALUES
     ('SN-001', 'Клиника №1', 'Работает'),
     ('SN-002', 'Клиника №2', 'В обслуживании');
 -- Заполнение таблицы Study
--- INSERT INTO Study (PatientID, UserID, DeviceID, Params, Notes)
--- VALUES
---     (1, 2, 1, '{"TR": 500, "TE": 20, "FOV": 250, "MatrixSize": [256, 256], "SliceThickness": 5, "NumberOfAverages": 2}',
---      'Исследование головного мозга'),
---     (2, 2, 2, '{"TR": 600, "TE": 25, "FOV": 300, "MatrixSize": [512, 512], "SliceThickness": 3, "NumberOfAverages": 1}',
---      'Исследование позвоночника');
+INSERT INTO Study (PatientID, UserID, DeviceID, Status, Notes)
+VALUES
+    (1, 2, 1, 'Planned',
+     'Исследование головного мозга'),
+    (2, 2, 2, 'Planned',
+     'Исследование позвоночника');
 -- Заполнение таблицы DeviceComment
 INSERT INTO DeviceComment (DeviceID, UserID, CommentText, Timestamp)
 VALUES
     (1, 3, 'Проведено плановое обслуживание', NOW() - INTERVAL '1 day'),
     (2, 3, 'Необходимо заменить деталь', NOW());
 -- Заполнение таблицы Schedule
--- INSERT INTO Schedule (StartTime, EndTime, StudyID, ScheduledByUserID, Comments)
--- VALUES
---     (NOW() + INTERVAL '1 hour', NOW() + INTERVAL '2 hours', 1, 2, 'Запланировано исследование для пациента
--- Иванова'),
---     (NOW() + INTERVAL '3 hours', NOW() + INTERVAL '4 hours', 2, 2, 'Запланировано исследование для пациента
--- Петрова');
+INSERT INTO Schedule (StartTime, EndTime, StudyID, ScheduledByUserID, Comments)
+VALUES
+    (NOW() + INTERVAL '1 hour', NOW() + INTERVAL '2 hours', 1, 2, 'Запланировано исследование для пациента
+Иванова'),
+    (NOW() + INTERVAL '3 hours', NOW() + INTERVAL '4 hours', 2, 2, 'Запланировано исследование для пациента
+Петрова');
 -- Заполнение таблицы AuditLog
 INSERT INTO AuditLog (UserID, ActionType, Entity, EntityID, Timestamp, Details)
 VALUES

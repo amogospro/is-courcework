@@ -2,6 +2,7 @@ package com.amogus.server.controllers;
 
 import com.amogus.server.dto.CreateScheduleDTO;
 import com.amogus.server.dto.ScheduleDTO;
+import com.amogus.server.models.Schedule;
 import com.amogus.server.services.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ScheduleController {
     private ScheduleService scheduleService;
 
     @GetMapping
-    public ResponseEntity<List<ScheduleDTO>> getAllSchedules(
+    public ResponseEntity<List<Schedule>> getAllSchedules(
             @RequestParam(required = false) Instant start,
             @RequestParam(required = false) Instant end
     ) {

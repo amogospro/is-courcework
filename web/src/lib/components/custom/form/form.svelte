@@ -1,11 +1,6 @@
 <script lang="ts">
-  import { z } from 'zod';
-
-  import { superForm } from 'sveltekit-superforms';
   import * as Card from '$lib/components/ui/card';
-  import { zodClient } from 'sveltekit-superforms/adapters';
   import { Button } from '$lib/components/ui/button';
-  import { toast } from 'svelte-sonner';
   import _ from 'lodash';
 
   export let enhance;
@@ -32,4 +27,3 @@
     </slot>
   </form>
 </div>
-<!-- <SuperDebug data={$formData} /> -->

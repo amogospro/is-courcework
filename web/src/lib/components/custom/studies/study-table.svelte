@@ -3,6 +3,7 @@
 
   import * as Dialog from '$lib/components/ui/dialog';
   import { writable } from 'svelte/store';
+  import IdActions from '../table/id-actions.svelte';
 
   import DataTableActions from '$lib/components/custom/table/data-table-actions.svelte';
   import { Button } from '$lib/components/ui/button';
@@ -15,14 +16,31 @@
   import Table from '$lib/components/custom/table/data-table.svelte';
 
   export let patients = writable<Study[]>([]);
-
   export let readonly = false;
+  export let id_selector = false;
+  export let selected: Study | null = null;
 
   const fetchFn = getStudies;
-
   let refetch: () => any;
 
   const colsFn: ColsFn<Study> = (table) => [
+    ...(id_selector
+      ? [
+          table.column({
+            accessor: (item) => item,
+            id: 'select',
+            header: '',
+            cell: (item) => {
+              return createRender(IdActions, {
+                id: String(item.value.id),
+                onSelect: () => {
+                  selected = item.value;
+                }
+              });
+            }
+          })
+        ]
+      : []),
     table.column({
       accessor: 'device',
       id: 'device',
@@ -106,37 +124,41 @@
     //   header: 'gender',
     //   cell: ({ value }) => value.gender ?? 'N/A'
     // }),
-    table.column({
-      accessor: (item) => item,
-      header: '',
-      cell: (item) => {
-        const id = item.value.id;
-        if (!id) throw new Error('no id');
-        return createRender(DataTableActions, {
-          onDelete: async () => {
-            await deleteStudy(id);
-            toast.success('patient deleted');
-            refetch();
-          },
-          update_form: createRender(StudyForm, {
-            data: item.value,
-            onSubmit: async (data) => {
-              await updateStudy(data);
-              toast.info('Study updated');
-              refetch();
+    ...(!readonly
+      ? [
+          table.column({
+            accessor: (item) => item,
+            header: '',
+            cell: (item) => {
+              const id = item.value.id;
+              if (!id) throw new Error('no id');
+              return createRender(DataTableActions, {
+                onDelete: async () => {
+                  await deleteStudy(id);
+                  toast.success('patient deleted');
+                  refetch();
+                },
+                update_form: createRender(StudyForm, {
+                  data: item.value,
+                  onSubmit: async (data) => {
+                    await updateStudy(data);
+                    toast.info('Study updated');
+                    refetch();
+                  }
+                })
+              });
+            },
+            plugins: {
+              sort: {
+                disable: true
+              },
+              filter: {
+                exclude: true
+              }
             }
           })
-        });
-      },
-      plugins: {
-        sort: {
-          disable: true
-        },
-        filter: {
-          exclude: true
-        }
-      }
-    })
+        ]
+      : [])
   ];
 </script>
 

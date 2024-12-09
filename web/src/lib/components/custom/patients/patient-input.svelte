@@ -2,7 +2,6 @@
   import PatientsTable from './patients-table.svelte';
   import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
   import type { Patient } from '$lib/types';
-  let str_id: string = '';
   import { Field, Control, Label, FieldErrors } from '$lib/components/ui/form';
   import { type FormPath, type SuperForm } from 'sveltekit-superforms/client';
   import * as Select from '$lib/components/ui/select';
@@ -13,6 +12,9 @@
   export let patient: Patient | null = null;
   export let name: FormPath<Item>;
   export let form: SuperForm<Item>;
+
+  let str_id: string = String(patient?.id ?? '');
+
   $: id = Number(str_id);
 </script>
 

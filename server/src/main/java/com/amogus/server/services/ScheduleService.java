@@ -23,9 +23,8 @@ public class ScheduleService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<ScheduleDTO> getSchedules(Instant start, Instant end) {
+    public List<Schedule> getSchedules(Instant start, Instant end) {
         return scheduleRepository.findAllByStarttimeBetween(start, end).stream()
-                .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -37,8 +36,8 @@ public class ScheduleService {
         Schedule schedule = new Schedule();
         schedule.setStarttime(dto.getStarttime());
         schedule.setEndtime(dto.getEndtime());
-        schedule.setStudyid(studyRepository.findById(dto.getStudyid()).orElseThrow(() -> new RuntimeException("Study not found")));
-        schedule.setScheduledbyuserid(userRepository.findById(dto.getScheduledbyuserid()).orElseThrow(() -> new RuntimeException("User not found")));
+        schedule.setStudy(studyRepository.findById(dto.getStudyid()).orElseThrow(() -> new RuntimeException("Study not found")));
+        schedule.setScheduledbyuser(userRepository.findById(dto.getScheduledbyuserid()).orElseThrow(() -> new RuntimeException("User not found")));
         schedule.setComments(dto.getComments());
         return convertToDTO(scheduleRepository.save(schedule));
     }
@@ -49,11 +48,11 @@ public class ScheduleService {
         schedule.setStarttime(dto.getStarttime());
         schedule.setEndtime(dto.getEndtime());
         // If studyId or scheduledByUserId changes are allowed, handle them here, e.g.:
-        if (!dto.getStudyid().equals(schedule.getStudyid().getId())) {
-            schedule.setStudyid(studyRepository.findById(dto.getStudyid()).orElseThrow(() -> new RuntimeException("Study not found")));
+        if (!dto.getStudyid().equals(schedule.getStudy().getId())) {
+            schedule.setStudy(studyRepository.findById(dto.getStudyid()).orElseThrow(() -> new RuntimeException("Study not found")));
         }
-        if (!dto.getScheduledbyuserid().equals(schedule.getScheduledbyuserid().getId())) {
-            schedule.setScheduledbyuserid(userRepository.findById(dto.getScheduledbyuserid()).orElseThrow(() -> new RuntimeException("User not found")));
+        if (!dto.getScheduledbyuserid().equals(schedule.getScheduledbyuser().getId())) {
+            schedule.setScheduledbyuser(userRepository.findById(dto.getScheduledbyuserid()).orElseThrow(() -> new RuntimeException("User not found")));
         }
         schedule.setComments(dto.getComments());
         return convertToDTO(scheduleRepository.save(schedule));
@@ -65,11 +64,11 @@ public class ScheduleService {
     }
 
     public List<ScheduleDTO> getSchedulesByStudyId(Integer studyId) {
-        return scheduleRepository.findByStudyid_Id(studyId).stream().map(this::convertToDTO).collect(Collectors.toList());
+        return scheduleRepository.findByStudy_Id(studyId).stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     public List<ScheduleDTO> getSchedulesByUserId(Integer userId) {
-        return scheduleRepository.findByScheduledbyuserid_Id(userId).stream().map(this::convertToDTO).collect(Collectors.toList());
+        return scheduleRepository.findByScheduledbyuser_Id(userId).stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     private ScheduleDTO convertToDTO(Schedule schedule) {
@@ -77,11 +76,11 @@ public class ScheduleService {
         dto.setId(schedule.getId());
         dto.setStarttime(schedule.getStarttime());
         dto.setEndtime(schedule.getEndtime());
-        if (schedule.getStudyid() != null) {
-            dto.setStudyId(schedule.getStudyid().getId());
+        if (schedule.getStudy() != null) {
+            dto.setStudyId(schedule.getStudy().getId());
         }
-        if (schedule.getScheduledbyuserid() != null) {
-            dto.setScheduledByUserId(schedule.getScheduledbyuserid().getId());
+        if (schedule.getScheduledbyuser() != null) {
+            dto.setScheduledByUserId(schedule.getScheduledbyuser().getId());
         }
         dto.setComments(schedule.getComments());
         return dto;

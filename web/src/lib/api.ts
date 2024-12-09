@@ -308,7 +308,7 @@ export const deleteSchedule = async (id: number) => {
 };
 
 export const getSchedules = async (q = new URLSearchParams()) => {
-  const { data } = await api.get<Response<Schedule[]>>(`/schedules?${q}`);
+  const { data } = await api.get<Schedule[]>(`/schedules?${q}`);
   console.log(data);
   return data;
 };

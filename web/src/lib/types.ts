@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+// person
 export const Gender = z.enum(['M', 'F', 'O']);
 export const PersonSchema = z.object({
   id: z.number().int().nonnegative().optional(), // id should be an integer and non-negative
@@ -13,7 +14,10 @@ export const PersonSchema = z.object({
   gender: Gender // Required string for gender
 });
 export type Person = z.infer<typeof PersonSchema>;
+export const getPersonStuff = (p: Person | undefined) =>
+  p ? `${p.firstname} ${p.lastname} ${p.middlename}` : '';
 
+// patient
 export const PatientSchema = z.object({
   id: z.number().int().nonnegative().optional(),
   person: PersonSchema,
@@ -21,6 +25,7 @@ export const PatientSchema = z.object({
 });
 export type Patient = z.infer<typeof PatientSchema>;
 
+// user
 export const UserSchema = z.object({
   id: z.number().int().nonnegative().optional(),
   person: PersonSchema,
@@ -28,6 +33,7 @@ export const UserSchema = z.object({
 });
 export type User = z.infer<typeof UserSchema>;
 
+// device
 export const DeviceStatus = z.enum(['Работает', 'Неисправно', 'В обслуживании']);
 export const DeviceSchema = z.object({
   id: z.number().int().nonnegative().optional(),
@@ -36,17 +42,9 @@ export const DeviceSchema = z.object({
   status: DeviceStatus
 });
 export type Device = z.infer<typeof DeviceSchema>;
-
-export const ScheduleSchema = z.object({
-  id: z.number().int().nonnegative().optional(),
-  starttime: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date' }),
-  endtime: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date' }),
-  studyid: z.number().int().nonnegative(),
-  scheduledbyuserid: z.number().int().nonnegative(),
-  comments: z.string().min(1)
-});
-export type Schedule = z.infer<typeof ScheduleSchema>;
-
+export const getDeviceStuff = (p: Device | undefined) =>
+  p ? `${p.devicesn} at ${p.location}` : '';
+// study
 export const StudyStatus = z.enum(['Planned', 'Canceled', 'Successed']);
 export const StudySchema = z.object({
   id: z.number().int().nonnegative().optional(),
@@ -64,3 +62,20 @@ export const StudySchema = z.object({
   notes: z.string()
 });
 export type Study = z.infer<typeof StudySchema>;
+
+// schedule
+export const ScheduleSchema = z.object({
+  id: z.number().int().nonnegative().optional(),
+  starttime: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date' }),
+  endtime: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date' }),
+
+  studyid: z.number().int().positive('Study must be selected'),
+  study: z.any().optional(),
+  scheduledbyuserid: z.number().int().positive('User must be selected'),
+  scheduledbyuser: z.any().optional(),
+  comments: z.string()
+});
+export type Schedule = z.infer<typeof ScheduleSchema> & {
+  study?: Study;
+  scheduledbyuser?: User;
+};
