@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'svelte-sonner';
 import { writable } from 'svelte/store';
-import type { Device, Patient } from './types';
+import type { Device, Patient, Study, Schedule, User } from './types';
 // import type { Organization, Person, Product, ProductEdit } from './types';
 // import ReconnectingWebSocket from 'reconnecting-websocket';
 // import { Subject } from 'rxjs';
@@ -213,6 +213,7 @@ export interface Response<T> {
   empty: boolean;
 }
 
+// patients
 export const createPatient = async (patient: Patient) => {
   const { data } = await api.post<Patient>(`/patients`, patient);
   console.log(data);
@@ -237,6 +238,7 @@ export const getPatients = async (q = new URLSearchParams()) => {
   return data;
 };
 
+// devices
 export const createDevice = async (Device: Device) => {
   const { data } = await api.post<Device>(`/devices`, Device);
   console.log(data);
@@ -260,7 +262,78 @@ export const getDevices = async (q = new URLSearchParams()) => {
   console.log(data);
   return data;
 };
-// export const deletePatient = async (id: number | string) => {
-//   const { data } = await api.delete(`/products/${id}`);
-//   console.log(data);
-// };
+
+// studies
+export const createStudy = async (study: Study) => {
+  const { data } = await api.post<Study>(`/studies`, study);
+  console.log(data);
+  return data;
+};
+
+export const updateStudy = async (study: Study) => {
+  const { data } = await api.put<Study>(`/studies/${study.id}`, study);
+  console.log(data);
+  return data;
+};
+
+export const deleteStudy = async (id: number) => {
+  const { data } = await api.delete<Study>(`/studies/${id}`);
+  console.log(data);
+  return data;
+};
+
+export const getStudies = async (q = new URLSearchParams()) => {
+  const { data } = await api.get<Response<Study[]>>(`/studies?${q}`);
+  console.log(data);
+  return data;
+};
+
+// schedules
+export const createSchedule = async (Schedule: Schedule) => {
+  const { data } = await api.post<Schedule>(`/schedules`, Schedule);
+  console.log(data);
+  return data;
+};
+
+export const updateSchedule = async (Schedule: Schedule) => {
+  const { data } = await api.put<Schedule>(`/schedules/${Schedule.id}`, Schedule);
+  console.log(data);
+  return data;
+};
+
+export const deleteSchedule = async (id: number) => {
+  const { data } = await api.delete<Schedule>(`/schedules/${id}`);
+  console.log(data);
+  return data;
+};
+
+export const getSchedules = async (q = new URLSearchParams()) => {
+  const { data } = await api.get<Response<Schedule[]>>(`/schedules?${q}`);
+  console.log(data);
+  return data;
+};
+
+// users
+export const createUser = async (user: User) => {
+  const { data } = await api.post<User>(`/users`, user);
+  console.log(data);
+  return data;
+};
+
+export const updateUser = async (user: User) => {
+  const { data } = await api.put<User>(`/users/${user.id}`, user);
+  console.log(data);
+  return data;
+};
+
+export const deleteUser = async (id: number) => {
+  const { data } = await api.delete<User>(`/users/${id}`);
+  console.log(data);
+  return data;
+};
+
+export const getUsers = async (q = new URLSearchParams()) => {
+  const { data } = await api.get<Response<User[]>>(`/users?${q}`);
+  console.log(data);
+  return data;
+};

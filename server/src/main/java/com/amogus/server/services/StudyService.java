@@ -1,12 +1,15 @@
 package com.amogus.server.services;
 
 import com.amogus.server.dto.StudyRequest;
+import com.amogus.server.models.Patient;
 import com.amogus.server.models.Study;
 import com.amogus.server.repositories.DeviceRepository;
 import com.amogus.server.repositories.PatientRepository;
 import com.amogus.server.repositories.StudyRepository;
 import com.amogus.server.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +26,8 @@ public class StudyService {
     @Autowired
     private DeviceRepository deviceRepository;
 
-    public List<Study> getAllStudies() {
-        return studyRepository.findAll();
+    public Page<Study> getAllStudies(Pageable pageable) {
+        return studyRepository.findAll(pageable);
     }
 
     public Study getStudyById(Integer id) {

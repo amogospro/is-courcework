@@ -19,7 +19,7 @@ public class Userprofile {
     @OneToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "personid", nullable = false)
-    private Person personid;
+    private Person person;
 
     @Column(name = "username", nullable = false, length = Integer.MAX_VALUE)
     private String username;
@@ -39,12 +39,12 @@ public class Userprofile {
         this.id = id;
     }
 
-    public Person getPersonid() {
-        return personid;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPersonid(Person personid) {
-        this.personid = personid;
+    public void setPerson(Person personid) {
+        this.person = personid;
     }
 
     public String getUsername() {

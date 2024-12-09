@@ -1,5 +1,5 @@
 <script lang="ts">
-  import DataTable from '$lib/components/custom/devices/devices-table.svelte';
+  import DataTable from '$lib/components/custom/studies/data-table.svelte';
 </script>
 
 <div class="container mx-auto grid w-full py-10">

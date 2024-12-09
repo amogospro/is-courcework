@@ -13,17 +13,34 @@
   import DeviceForm from './device-form.svelte';
   import { type ColsFn } from '$lib/components/custom/table/table';
   import Table from '$lib/components/custom/table/data-table.svelte';
-  import AlertDialogAction from '$lib/components/ui/alert-dialog/alert-dialog-action.svelte';
-
+  import IdActions from '../table/id-actions.svelte';
   export let Devices = writable<Device[]>([]);
 
   export let readonly = false;
-
+  export let selected: Device | null = null;
+  export let id_selector = false;
   const fetchFn = getDevices;
-
   let refetch: () => any;
 
   const colsFn: ColsFn<Device> = (table) => [
+    ...(id_selector
+      ? [
+          table.column({
+            accessor: (item) => item,
+            id: 'select',
+            header: '',
+            cell: (item) => {
+              return createRender(IdActions, {
+                id: String(item.value.id),
+                onSelect: () => {
+                  selected = item.value;
+                }
+              });
+            }
+          })
+        ]
+      : []),
+
     // Name Column
     table.column({
       accessor: 'devicesn',
@@ -37,43 +54,47 @@
       accessor: 'status',
       header: 'status'
     }),
-    table.column({
-      accessor: (item) => item,
-      header: '',
-      cell: (item) => {
-        const id = item.value.id;
-        if (!id) throw new Error('no id');
-        return createRender(DataTableActions, {
-          onDelete: async () => {
-            await deleteDevice(id);
-            toast.success('Device deleted');
-            refetch();
-          },
-          update_form: createRender(DeviceForm, {
-            data: item.value,
-            onSubmit: async (data) => {
-              await updateDevice(data);
-              toast.info('Product updated');
-              refetch();
+    ...(!readonly
+      ? [
+          table.column({
+            accessor: (item) => item,
+            header: '',
+            cell: (item) => {
+              const id = item.value.id;
+              if (!id) throw new Error('no id');
+              return createRender(DataTableActions, {
+                onDelete: async () => {
+                  await deleteDevice(id);
+                  toast.success('Device deleted');
+                  refetch();
+                },
+                update_form: createRender(DeviceForm, {
+                  data: item.value,
+                  onSubmit: async (data) => {
+                    await updateDevice(data);
+                    toast.info('Product updated');
+                    refetch();
+                  }
+                })
+              });
+            },
+            plugins: {
+              sort: {
+                disable: true
+              },
+              filter: {
+                exclude: true
+              }
             }
           })
-        });
-      },
-      plugins: {
-        sort: {
-          disable: true
-        },
-        filter: {
-          exclude: true
-        }
-      }
-    })
+        ]
+      : [])
   ];
 </script>
 
 <div>
-  <div class="gap-10px flex items-end py-4">
-    {#if !readonly}
+  {#if !readonly}
+    <div class="gap-10px flex items-end py-4">
       <Dialog.Root>
         <Dialog.Trigger class="ml-auto">
           <Button>New Device</Button>
@@ -97,7 +118,7 @@
           </DeviceForm>
         </Dialog.Content>
       </Dialog.Root>
-    {/if}
-  </div>
+    </div>
+  {/if}
   <Table {colsFn} {fetchFn} items={Devices} bind:refetch />
 </div>

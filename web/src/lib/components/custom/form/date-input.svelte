@@ -1,20 +1,11 @@
 <script lang="ts">
-  import moment from 'moment';
-
   import _ from 'lodash';
   import { Field, Control, Label, FieldErrors } from '$lib/components/ui/form';
   import { type FormPath, type SuperForm } from 'sveltekit-superforms/client';
-  import * as Select from '$lib/components/ui/select';
   import * as Popover from '$lib/components/ui/popover/index.js';
   import { Button } from '$lib/components/ui/button';
   import CalendarIcon from 'lucide-svelte/icons/calendar';
-  import {
-    CalendarDate,
-    DateFormatter,
-    type DateValue,
-    getLocalTimeZone,
-    parseDate
-  } from '@internationalized/date';
+  import { DateFormatter, type DateValue, parseDate } from '@internationalized/date';
   import { cn } from '$lib/utils';
   import { Calendar } from '$lib/components/ui/calendar/index.js';
   import { onMount } from 'svelte';

@@ -13,16 +13,34 @@
   import PatientForm from './patient-form.svelte';
   import { type ColsFn } from '$lib/components/custom/table/table';
   import Table from '$lib/components/custom/table/data-table.svelte';
+  import IdActions from '../table/id-actions.svelte';
 
   export let patients = writable<Patient[]>([]);
 
   export let readonly = false;
-
+  export let selected: Patient | null = null;
+  export let id_selector = false;
   const fetchFn = getPatients;
-
   let refetch: () => any;
 
   const colsFn: ColsFn<Patient> = (table) => [
+    ...(id_selector
+      ? [
+          table.column({
+            accessor: (item) => item,
+            id: 'select',
+            header: '',
+            cell: (item) => {
+              return createRender(IdActions, {
+                id: String(item.value.id),
+                onSelect: () => {
+                  selected = item.value;
+                }
+              });
+            }
+          })
+        ]
+      : []),
     // Name Column
     table.column({
       accessor: 'insurancepolicynumber',
@@ -83,43 +101,47 @@
       header: 'gender',
       cell: ({ value }) => value.gender ?? 'N/A'
     }),
-    table.column({
-      accessor: (item) => item,
-      header: '',
-      cell: (item) => {
-        const id = item.value.id;
-        if (!id) throw new Error('no id');
-        return createRender(DataTableActions, {
-          onDelete: async () => {
-            await deletePatient(id);
-            toast.success('patient deleted');
-            refetch();
-          },
-          update_form: createRender(PatientForm, {
-            data: item.value,
-            onSubmit: async (data) => {
-              await updatePatient(data);
-              toast.info('Product updated');
-              refetch();
+    ...(!readonly
+      ? [
+          table.column({
+            accessor: (item) => item,
+            header: '',
+            cell: (item) => {
+              const id = item.value.id;
+              if (!id) throw new Error('no id');
+              return createRender(DataTableActions, {
+                onDelete: async () => {
+                  await deletePatient(id);
+                  toast.success('patient deleted');
+                  refetch();
+                },
+                update_form: createRender(PatientForm, {
+                  data: item.value,
+                  onSubmit: async (data) => {
+                    await updatePatient(data);
+                    toast.info('Product updated');
+                    refetch();
+                  }
+                })
+              });
+            },
+            plugins: {
+              sort: {
+                disable: true
+              },
+              filter: {
+                exclude: true
+              }
             }
           })
-        });
-      },
-      plugins: {
-        sort: {
-          disable: true
-        },
-        filter: {
-          exclude: true
-        }
-      }
-    })
+        ]
+      : [])
   ];
 </script>
 
 <div>
-  <div class="gap-10px flex items-end py-4">
-    {#if !readonly}
+  {#if !readonly}
+    <div class="gap-10px flex items-end py-4">
       <Dialog.Root>
         <Dialog.Trigger class="ml-auto">
           <Button>New Patient</Button>
@@ -150,7 +172,7 @@
           </PatientForm>
         </Dialog.Content>
       </Dialog.Root>
-    {/if}
-  </div>
+    </div>
+  {/if}
   <Table {colsFn} {fetchFn} items={patients} bind:refetch />
 </div>
