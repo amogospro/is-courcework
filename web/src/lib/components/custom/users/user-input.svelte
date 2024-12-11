@@ -5,6 +5,7 @@
   import { Field, Control, Label, FieldErrors } from '$lib/components/ui/form';
   import { type FormPath, type SuperForm } from 'sveltekit-superforms/client';
   import * as Select from '$lib/components/ui/select';
+  import { _ as t } from 'svelte-i18n';
 
   type Item = $$Generic<Record<string, unknown>>;
 
@@ -19,11 +20,11 @@
 
 <Field {form} {name}>
   <Control let:attrs>
-    <Label><slot>Select user</slot></Label>
+    <Label><slot>{$t('select-user')}</slot></Label>
     <Select.Root>
       <Select.Trigger>
         {#if user?.person == null}
-          <Select.Value placeholder="Select User" />
+          <Select.Value placeholder={$t('select-user')} />
         {:else}
           <Select.Value
             placeholder="{user?.person.firstname} {user?.person.lastname} 

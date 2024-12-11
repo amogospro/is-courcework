@@ -1,9 +1,7 @@
 <script lang="ts">
   import { createRender } from 'svelte-headless-table';
-
   import * as Dialog from '$lib/components/ui/dialog';
   import { writable } from 'svelte/store';
-
   import DataTableActions from '$lib/components/custom/table/data-table-actions.svelte';
   import { Button } from '$lib/components/ui/button';
   import type { Patient } from '$lib/types';
@@ -14,6 +12,7 @@
   import { type ColsFn } from '$lib/components/custom/table/table';
   import Table from '$lib/components/custom/table/data-table.svelte';
   import IdActions from '../table/id-actions.svelte';
+  import { _ as t } from 'svelte-i18n';
 
   export let patients = writable<Patient[]>([]);
 
@@ -44,62 +43,62 @@
     // Name Column
     table.column({
       accessor: 'insurancepolicynumber',
-      header: 'Номер страхового полиса'
+      header: $t('insurancepolicynumber')
     }),
     // Name Column
     table.column({
       accessor: 'person',
       id: 'firstname',
-      header: 'firstname',
+      header: $t('firstname'),
       cell: ({ value }) => {
-        return value.firstname ?? 'N/A';
+        return value.firstname ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'lastname',
-      header: 'lastname',
+      header: $t('lastname'),
       cell: ({ value }) => {
-        return value.lastname ?? 'N/A';
+        return value.lastname ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'middlename',
-      header: 'middlename',
+      header: $t('middlename'),
       cell: ({ value }) => {
-        return value.middlename ?? 'N/A';
+        return value.middlename ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'email',
-      header: 'email',
+      header: $t('email'),
       cell: ({ value }) => {
-        return value.email ?? 'N/A';
+        return value.email ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'phonenumber',
-      header: 'phonenumber',
+      header: $t('phonenumber'),
       cell: ({ value }) => {
-        return value.phonenumber ?? 'N/A';
+        return value.phonenumber ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'dateofbirth',
-      header: 'dateofbirth',
+      header: $t('dateofbirth'),
       cell: ({ value }) => {
-        return value.dateofbirth ?? 'N/A';
+        return value.dateofbirth ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'gender',
-      header: 'gender',
-      cell: ({ value }) => value.gender ?? 'N/A'
+      header: $t('gender'),
+      cell: ({ value }) => value.gender ?? $t('n-a')
     }),
     ...(!readonly
       ? [
@@ -112,14 +111,14 @@
               return createRender(DataTableActions, {
                 onDelete: async () => {
                   await deletePatient(id);
-                  toast.success('patient deleted');
+                  toast.success($t('patient-deleted'));
                   refetch();
                 },
                 update_form: createRender(PatientForm, {
                   data: item.value,
                   onSubmit: async (data) => {
                     await updatePatient(data);
-                    toast.info('Product updated');
+                    toast.info($t('patient-updated'));
                     refetch();
                   }
                 })
@@ -144,7 +143,7 @@
     <div class="gap-10px flex items-end py-4">
       <Dialog.Root>
         <Dialog.Trigger class="ml-auto">
-          <Button>New Patient</Button>
+          <Button>{$t('new-patient')}</Button>
         </Dialog.Trigger>
         <Dialog.Content class="w-full max-w-[1500px]">
           <PatientForm
@@ -167,8 +166,8 @@
               insurancepolicynumber: ''
             }}
           >
-            <svelte:fragment slot="title">Create new patient</svelte:fragment>
-            <svelte:fragment slot="button">Create</svelte:fragment>
+            <svelte:fragment slot="title">{$t('create-new-patient')}</svelte:fragment>
+            <svelte:fragment slot="button">{$t('create')}</svelte:fragment>
           </PatientForm>
         </Dialog.Content>
       </Dialog.Root>

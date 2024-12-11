@@ -1,9 +1,7 @@
 <script lang="ts">
   import { createRender } from 'svelte-headless-table';
-
   import * as Dialog from '$lib/components/ui/dialog';
   import { writable } from 'svelte/store';
-
   import DataTableActions from '$lib/components/custom/table/data-table-actions.svelte';
   import { Button } from '$lib/components/ui/button';
   import type { Device } from '$lib/types';
@@ -14,11 +12,13 @@
   import { type ColsFn } from '$lib/components/custom/table/table';
   import Table from '$lib/components/custom/table/data-table.svelte';
   import IdActions from '../table/id-actions.svelte';
-  export let Devices = writable<Device[]>([]);
+  import { _ as t } from 'svelte-i18n';
 
+  export let Devices = writable<Device[]>([]);
   export let readonly = false;
   export let selected: Device | null = null;
   export let id_selector = false;
+
   const fetchFn = getDevices;
   let refetch: () => any;
 
@@ -44,15 +44,15 @@
     // Name Column
     table.column({
       accessor: 'devicesn',
-      header: 'devicesn'
+      header: $t('devicesn')
     }),
     table.column({
       accessor: 'location',
-      header: 'location'
+      header: $t('location')
     }),
     table.column({
       accessor: 'status',
-      header: 'status'
+      header: $t('status')
     }),
     ...(!readonly
       ? [
@@ -65,14 +65,14 @@
               return createRender(DataTableActions, {
                 onDelete: async () => {
                   await deleteDevice(id);
-                  toast.success('Device deleted');
+                  toast.success($t('device-deleted'));
                   refetch();
                 },
                 update_form: createRender(DeviceForm, {
                   data: item.value,
                   onSubmit: async (data) => {
                     await updateDevice(data);
-                    toast.info('Product updated');
+                    toast.info($t('product-updated'));
                     refetch();
                   }
                 })
@@ -97,14 +97,14 @@
     <div class="gap-10px flex items-end py-4">
       <Dialog.Root>
         <Dialog.Trigger class="ml-auto">
-          <Button>New Device</Button>
+          <Button>{$t('new-device')}</Button>
         </Dialog.Trigger>
         <Dialog.Content class="w-full max-w-[1500px]">
           <DeviceForm
             onSubmit={async (data) => {
               console.log(data);
               await createDevice(data);
-              toast.info('Device created');
+              toast.info($t('device-created'));
               refetch();
             }}
             data={{
@@ -113,8 +113,8 @@
               status: 'Работает'
             }}
           >
-            <svelte:fragment slot="title">Create new Device</svelte:fragment>
-            <svelte:fragment slot="button">Create</svelte:fragment>
+            <svelte:fragment slot="title">{$t('create-new-device')}</svelte:fragment>
+            <svelte:fragment slot="button">{$t('create')}</svelte:fragment>
           </DeviceForm>
         </Dialog.Content>
       </Dialog.Root>

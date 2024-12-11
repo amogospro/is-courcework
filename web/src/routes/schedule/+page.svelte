@@ -25,62 +25,21 @@
   import { writable } from 'svelte/store';
   import { createResizePlugin } from '@schedule-x/resize';
   import { onMount } from 'svelte';
+  import { _ as t } from 'svelte-i18n';
+  import { locale, waitLocale } from 'svelte-i18n';
 
   const iso2Calendar = (s: string) => moment(s).format('YYYY-MM-DD HH:mm');
   const calendar2Iso = (s: string) => moment(s, 'YYYY-MM-DD HH:mm').toISOString(true);
 
   let calendar_div: HTMLDivElement;
-  const sus = [
-    {
-      id: 1,
-      title: 'Coffee with John',
-      start: '2023-12-01',
-      end: '2023-12-01'
-    },
-    {
-      id: 2,
-      title: 'Breakfast with Sam',
-      description: 'Discuss the new project',
-      location: 'Starbucks',
-      start: '2023-11-29 05:00',
-      end: '2023-11-29 06:00'
-    },
-    {
-      id: 3,
-      title: 'Gym',
-      start: '2023-11-27 06:00',
-      end: '2023-11-27 07:00',
-      calendarId: 'leisure'
-    },
-    {
-      id: 4,
-      title: 'Media fasting',
-      start: '2023-12-01',
-      end: '2023-12-03',
-      calendarId: 'leisure'
-    },
-    {
-      id: 5,
-      title: 'Some appointment',
-      people: ['John'],
-      start: '2023-12-03 03:00',
-      end: '2023-12-03 04:30'
-    },
-    {
-      id: 6,
-      title: 'Other appointment',
-      people: ['Susan', 'Mike'],
-      start: '2023-12-03 03:00',
-      end: '2023-12-03 04:00',
-      calendarId: 'leisure'
-    }
-  ];
+
   const schedule = writable<Schedule[]>([]);
   const calendarApp = createCalendar({
     views: [viewMonthGrid, viewMonthAgenda, viewWeek, viewDay],
     selectedDate: iso2Calendar(today(getLocalTimeZone()).toString()),
     defaultView: viewWeek.name,
     events: [],
+    locale: $locale ?? 'en-US',
     calendars: {
       leisure: {
         colorName: 'leisure',
@@ -104,7 +63,7 @@
       async onEventUpdate(event) {
         const updated = fromEvent(event);
         const res = await updateSchedule(updated);
-        toast.info('Event updated');
+        toast.info($t('event-updated'));
       },
       onEventClick(event) {
         update_key++;
@@ -144,9 +103,9 @@
       id: event.id ?? Math.random() * 1000000000,
       start: iso2Calendar(event.starttime),
       end: iso2Calendar(event.endtime),
-      location: `Device: ${getDeviceStuff(event.study?.device)}`,
-      people: [`Doctor: ${getPersonStuff(event.study?.user?.person)}`],
-      title: `Patient: ${getPersonStuff(event.study?.patient?.person)}`,
+      location: `${$t('device')}: ${getDeviceStuff(event.study?.device)}`,
+      people: [`${$t('doctor')}: ${getPersonStuff(event.study?.user?.person)}`],
+      title: `${$t('patient')}: ${getPersonStuff(event.study?.patient?.person)}`,
       description: event.comments
 
       // title: `Doctor: ${getPersonStuff(event.study?.user?.person)} \n
@@ -184,7 +143,7 @@
     if (!schedule) return;
     console.log(schedule);
     const res = await updateSchedule(schedule);
-    toast.info('Event updated');
+    toast.info($t('event-updated'));
     refetch();
   };
 </script>
@@ -193,14 +152,14 @@
   <div>
     <Dialog.Root>
       <Dialog.Trigger class="ml-auto">
-        <Button>New event</Button>
+        <Button>{$t('new-event')}</Button>
       </Dialog.Trigger>
       <Dialog.Content class="w-full max-w-[1500px]">
         <ScheduleForm
           onSubmit={async (data) => {
             console.log(data);
             await createSchedule(data);
-            toast.info('Patient created');
+            toast.info($t('patient-created'));
             // refetch();
           }}
           data={{
@@ -211,8 +170,8 @@
             comments: ''
           }}
         >
-          <svelte:fragment slot="title">Create new event</svelte:fragment>
-          <svelte:fragment slot="button">Create</svelte:fragment>
+          <svelte:fragment slot="title">{$t('create-new-event')}</svelte:fragment>
+          <svelte:fragment slot="button">{$t('create')}</svelte:fragment>
         </ScheduleForm>
       </Dialog.Content>
     </Dialog.Root>

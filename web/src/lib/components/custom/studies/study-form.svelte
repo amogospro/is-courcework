@@ -1,21 +1,16 @@
 <script lang="ts">
-  import { Gender, StudySchema, StudyStatus, type Study } from '$lib/types';
+  import { StudySchema, StudyStatus, type Study } from '$lib/types';
   import _ from 'lodash';
   import StringInput from '../form/string-input.svelte';
   import SelectInput from '../form/select-input.svelte';
-  import DateInput from '../form/date-input.svelte';
   import Form from '../form/form.svelte';
   import { createForm } from '../form/form-utils';
   import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
-
-  import { Field, Control, Label, FieldErrors } from '$lib/components/ui/form';
-  import { type FormPath, type SuperForm } from 'sveltekit-superforms/client';
-  import { Input } from '$lib/components/ui/input';
-  import DevicesTable from '../devices/devices-table.svelte';
   import DeviceInput from '../devices/device-input.svelte';
   import PatientInput from '../patients/patient-input.svelte';
   import UserInput from '../users/user-input.svelte';
+  import { _ as t } from 'svelte-i18n';
 
   export let data: Study;
   export let readonly = false;
@@ -29,13 +24,13 @@
     <Card.Footer>
       <div class="flex w-full">
         <Button class="ml-auto" type="submit">
-          <slot name="button">Update</slot>
+          <slot name="button">{$t('update')}</slot>
         </Button>
       </div>
     </Card.Footer>
   </svelte:fragment>
   <svelte:fragment slot="title">
-    <slot name="title">Edit study</slot>
+    <slot name="title">{$t('edit-study')}</slot>
   </svelte:fragment>
 
   <!-- content here -->
@@ -48,11 +43,13 @@
         {form}
         options={StudyStatus.options}
         bind:value={$formData.status}
-        placeholder="Select status"
+        placeholder={$t('select-status')}
       >
-        Status
+        {$t('status')}
       </SelectInput>
-      <StringInput name="notes" {readonly} {form} bind:value={$formData.notes}>notes</StringInput>
+      <StringInput name="notes" {readonly} {form} bind:value={$formData.notes}>
+        {$t('notes')}
+      </StringInput>
 
       <DeviceInput
         {form}

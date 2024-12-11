@@ -14,6 +14,7 @@
   import { type ColsFn } from '$lib/components/custom/table/table';
   import Table from '$lib/components/custom/table/data-table.svelte';
   import IdActions from '../table/id-actions.svelte';
+  import { _ as t } from 'svelte-i18n';
 
   export let users = writable<User[]>([]);
 
@@ -44,62 +45,62 @@
     // Name Column
     table.column({
       accessor: 'username',
-      header: 'username'
+      header: $t('username')
     }),
     // Name Column
     table.column({
       accessor: 'person',
       id: 'firstname',
-      header: 'firstname',
+      header: $t('firstname'),
       cell: ({ value }) => {
-        return value.firstname ?? 'N/A';
+        return value.firstname ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'lastname',
-      header: 'lastname',
+      header: $t('lastname'),
       cell: ({ value }) => {
-        return value.lastname ?? 'N/A';
+        return value.lastname ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'middlename',
-      header: 'middlename',
+      header: $t('middlename'),
       cell: ({ value }) => {
-        return value.middlename ?? 'N/A';
+        return value.middlename ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'email',
-      header: 'email',
+      header: $t('email'),
       cell: ({ value }) => {
-        return value.email ?? 'N/A';
+        return value.email ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'phonenumber',
-      header: 'phonenumber',
+      header: $t('phonenumber'),
       cell: ({ value }) => {
-        return value.phonenumber ?? 'N/A';
+        return value.phonenumber ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'dateofbirth',
-      header: 'dateofbirth',
+      header: $t('dateofbirth'),
       cell: ({ value }) => {
-        return value.dateofbirth ?? 'N/A';
+        return value.dateofbirth ?? $t('n-a');
       }
     }),
     table.column({
       accessor: 'person',
       id: 'gender',
-      header: 'gender',
-      cell: ({ value }) => value.gender ?? 'N/A'
+      header: $t('gender'),
+      cell: ({ value }) => value.gender ?? $t('n-a')
     }),
     ...(!readonly
       ? [
@@ -112,14 +113,14 @@
               return createRender(DataTableActions, {
                 onDelete: async () => {
                   await deleteUser(id);
-                  toast.success('user deleted');
+                  toast.success($t('user-deleted'));
                   refetch();
                 },
                 update_form: createRender(UserForm, {
                   data: item.value,
                   onSubmit: async (data) => {
                     await updateUser(data);
-                    toast.info('Product updated');
+                    toast.info($t('user-updated'));
                     refetch();
                   }
                 })
@@ -144,14 +145,14 @@
     <div class="gap-10px flex items-end py-4">
       <Dialog.Root>
         <Dialog.Trigger class="ml-auto">
-          <Button>New User</Button>
+          <Button>{$t('new-user')}</Button>
         </Dialog.Trigger>
         <Dialog.Content class="w-full max-w-[1500px]">
           <UserForm
             onSubmit={async (data) => {
               console.log(data);
               await createUser(data);
-              toast.info('User created');
+              toast.info($t('user-created'));
               refetch();
             }}
             data={{
@@ -167,8 +168,8 @@
               username: ''
             }}
           >
-            <svelte:fragment slot="title">Create new user</svelte:fragment>
-            <svelte:fragment slot="button">Create</svelte:fragment>
+            <svelte:fragment slot="title">{$t('create-new-user')}</svelte:fragment>
+            <svelte:fragment slot="button">{$t('create')}</svelte:fragment>
           </UserForm>
         </Dialog.Content>
       </Dialog.Root>

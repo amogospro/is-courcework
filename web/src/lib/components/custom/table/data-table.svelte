@@ -11,6 +11,7 @@
   import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
   import { Button } from '$lib/components/ui/button';
   import { cn } from '$lib/utils';
+  import { _ as t } from 'svelte-i18n';
   import { type Response } from '$lib/api';
 
   export type Item = $$Generic;
@@ -123,13 +124,13 @@
       variant="outline"
       size="sm"
       on:click={() => ($pageIndex = $pageIndex - 1)}
-      disabled={!$hasPreviousPage}>Previous</Button
+      disabled={!$hasPreviousPage}>{$t('previous')}</Button
     >
     <Button
       variant="outline"
       size="sm"
       disabled={!$hasNextPage}
-      on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
+      on:click={() => ($pageIndex = $pageIndex + 1)}>{$t('next')}</Button
     >
   </div>
 {/if}

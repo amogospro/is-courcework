@@ -5,6 +5,7 @@
   import Trash from 'svelte-radix/Trash.svelte';
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import { ComponentRenderConfig, Render } from 'svelte-render';
+  import { _ as t } from 'svelte-i18n';
 
   type FormComponent = $$Generic<SvelteComponent>;
   export let update_form: ComponentRenderConfig<FormComponent>;
@@ -20,12 +21,12 @@
     </AlertDialog.Trigger>
     <AlertDialog.Content>
       <AlertDialog.Header>
-        <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-        <AlertDialog.Description>This action cannot be undone.</AlertDialog.Description>
+        <AlertDialog.Title>{$t('are-you-absolutely-sure')}</AlertDialog.Title>
+        <AlertDialog.Description>{$t('this-action-cannot-be-undone')}</AlertDialog.Description>
       </AlertDialog.Header>
       <AlertDialog.Footer>
-        <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-        <AlertDialog.Action on:click={onDelete}>Delete</AlertDialog.Action>
+        <AlertDialog.Cancel>{$t('cancel')}</AlertDialog.Cancel>
+        <AlertDialog.Action on:click={onDelete}>{$t('delete')}</AlertDialog.Action>
       </AlertDialog.Footer>
     </AlertDialog.Content>
   </AlertDialog.Root>

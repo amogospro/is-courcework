@@ -2,6 +2,7 @@
   import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
   import _ from 'lodash';
+  import { _ as t } from 'svelte-i18n';
 
   export let enhance;
 </script>
@@ -20,7 +21,7 @@
       <Card.Footer>
         <div class="flex w-full">
           <Button class="ml-auto" type="submit">
-            <slot name="button">Update</slot>
+            <slot name="button">{$t('update')}</slot>
           </Button>
         </div>
       </Card.Footer>

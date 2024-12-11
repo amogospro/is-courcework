@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { Input } from '$lib/components/ui/input';
-
   import DevicesTable from './devices-table.svelte';
   import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
   import type { Device } from '$lib/types';
   import { Field, Control, Label, FieldErrors } from '$lib/components/ui/form';
   import { type FormPath, type SuperForm } from 'sveltekit-superforms/client';
   import * as Select from '$lib/components/ui/select';
+  import { _ as t } from 'svelte-i18n';
 
   type Item = $$Generic<Record<string, unknown>>;
 
@@ -22,13 +21,13 @@
 
 <Field {form} {name}>
   <Control let:attrs>
-    <Label><slot>Select device</slot></Label>
+    <Label><slot>{$t('select-device')}</slot></Label>
     <Select.Root>
       <Select.Trigger>
         {#if device == null}
-          <Select.Value placeholder="Select device" />
+          <Select.Value placeholder={$t('select-device')} />
         {:else}
-          <Select.Value placeholder="{device?.devicesn} at {device?.location}" />
+          <Select.Value placeholder="{device?.devicesn} {$t('at')} {device?.location}" />
         {/if}
       </Select.Trigger>
       <Select.Content>

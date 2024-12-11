@@ -14,6 +14,7 @@
   import StudyForm from './study-form.svelte';
   import { type ColsFn } from '$lib/components/custom/table/table';
   import Table from '$lib/components/custom/table/data-table.svelte';
+  import { _ as t } from 'svelte-i18n';
 
   export let patients = writable<Study[]>([]);
   export let readonly = false;
@@ -44,38 +45,38 @@
     table.column({
       accessor: 'device',
       id: 'device',
-      header: 'Device',
+      header: $t('device'),
       cell: ({ value }) => {
-        return `${value?.devicesn ?? 'N/A'} at ${value?.location ?? 'N/A'}`;
+        return `${value?.devicesn ?? $t('n-a')} ${$t('at')} ${value?.location ?? $t('n-a')}`;
       }
     }),
     table.column({
       accessor: 'patient',
       id: 'patient',
-      header: 'Person',
+      header: $t('patient'),
       cell: ({ value }) => {
-        return `${value?.person.firstname ?? 'N/A'} ${value?.person.middlename ?? 'N/A'} ${value?.person.lastname ?? 'N/A'}`;
+        return `${value?.person.firstname ?? $t('n-a')} ${value?.person.middlename ?? $t('n-a')} ${value?.person.lastname ?? $t('n-a')}`;
       }
     }),
     table.column({
       accessor: 'user',
       id: 'user',
-      header: 'Doctor',
+      header: $t('doctor'),
       cell: ({ value }) => {
-        return `${value?.person.firstname ?? 'N/A'} ${value?.person.middlename ?? 'N/A'} ${value?.person.lastname ?? 'N/A'}`;
+        return `${value?.person.firstname ?? $t('n-a')} ${value?.person.middlename ?? $t('n-a')} ${value?.person.lastname ?? $t('n-a')}`;
       }
     }),
 
     table.column({
       accessor: 'status',
       id: 'status',
-      header: 'status'
+      header: $t('status')
     }),
 
     table.column({
       accessor: 'notes',
       id: 'notes',
-      header: 'notes'
+      header: $t('notes')
     }),
 
     // table.column({
@@ -83,7 +84,7 @@
     //   id: 'lastname',
     //   header: 'lastname',
     //   cell: ({ value }) => {
-    //     return value.lastname ?? 'N/A';
+    //     return value.lastname ?? $t('n-a');
     //   }
     // }),
     // table.column({
@@ -91,7 +92,7 @@
     //   id: 'middlename',
     //   header: 'middlename',
     //   cell: ({ value }) => {
-    //     return value.middlename ?? 'N/A';
+    //     return value.middlename ?? $t('n-a');
     //   }
     // }),
     // table.column({
@@ -99,7 +100,7 @@
     //   id: 'email',
     //   header: 'email',
     //   cell: ({ value }) => {
-    //     return value.email ?? 'N/A';
+    //     return value.email ?? $t('n-a');
     //   }
     // }),
     // table.column({
@@ -107,7 +108,7 @@
     //   id: 'phonenumber',
     //   header: 'phonenumber',
     //   cell: ({ value }) => {
-    //     return value.phonenumber ?? 'N/A';
+    //     return value.phonenumber ?? $t('n-a');
     //   }
     // }),
     // table.column({
@@ -115,14 +116,14 @@
     //   id: 'dateofbirth',
     //   header: 'dateofbirth',
     //   cell: ({ value }) => {
-    //     return value.dateofbirth ?? 'N/A';
+    //     return value.dateofbirth ?? $t('n-a');
     //   }
     // }),
     // table.column({
     //   accessor: 'person',
     //   id: 'gender',
     //   header: 'gender',
-    //   cell: ({ value }) => value.gender ?? 'N/A'
+    //   cell: ({ value }) => value.gender ?? $t('n-a')
     // }),
     ...(!readonly
       ? [
@@ -135,14 +136,14 @@
               return createRender(DataTableActions, {
                 onDelete: async () => {
                   await deleteStudy(id);
-                  toast.success('patient deleted');
+                  toast.success($t('study-deleted'));
                   refetch();
                 },
                 update_form: createRender(StudyForm, {
                   data: item.value,
                   onSubmit: async (data) => {
                     await updateStudy(data);
-                    toast.info('Study updated');
+                    toast.info($t('study-updated'));
                     refetch();
                   }
                 })
@@ -167,14 +168,14 @@
     {#if !readonly}
       <Dialog.Root>
         <Dialog.Trigger class="ml-auto">
-          <Button>New Study</Button>
+          <Button>{$t('new-study')}</Button>
         </Dialog.Trigger>
         <Dialog.Content class="w-full max-w-[1500px]">
           <StudyForm
             onSubmit={async (data) => {
               console.log(data);
               await createStudy(data);
-              toast.info('Study created');
+              toast.info($t('study-created'));
               refetch();
             }}
             data={{
@@ -185,8 +186,8 @@
               userid: 0
             }}
           >
-            <svelte:fragment slot="title">Create new study</svelte:fragment>
-            <svelte:fragment slot="button">Create</svelte:fragment>
+            <svelte:fragment slot="title">{$t('create-new-study')}</svelte:fragment>
+            <svelte:fragment slot="button">{$t('create')}</svelte:fragment>
           </StudyForm>
         </Dialog.Content>
       </Dialog.Root>

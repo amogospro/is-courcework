@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { Gender, DeviceSchema, type Device, DeviceStatus } from '$lib/types';
+  import { DeviceSchema, type Device, DeviceStatus } from '$lib/types';
   import _ from 'lodash';
   import StringInput from '../form/string-input.svelte';
   import SelectInput from '../form/select-input.svelte';
-  import DateInput from '../form/date-input.svelte';
   import Form from '../form/form.svelte';
   import { createForm } from '../form/form-utils';
   import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
+  import { _ as t } from 'svelte-i18n';
 
   export let data: Device;
   export let readonly = false;
@@ -21,13 +21,13 @@
     <Card.Footer>
       <div class="flex w-full">
         <Button class="ml-auto" type="submit">
-          <slot name="button">Update</slot>
+          <slot name="button">{$t('update')}</slot>
         </Button>
       </div>
     </Card.Footer>
   </svelte:fragment>
   <svelte:fragment slot="title">
-    <slot name="title">Edit Device</slot>
+    <slot name="title">{$t('edit-device')}</slot>
   </svelte:fragment>
 
   <!-- content here -->
@@ -35,10 +35,10 @@
     <!-- Product Name -->
     <div>
       <StringInput name="devicesn" {readonly} {form} bind:value={$formData.devicesn}>
-        devicesn
+        {$t('devicesn')}
       </StringInput>
       <StringInput name="location" {readonly} {form} bind:value={$formData.location}>
-        devicesn
+        {$t('location')}
       </StringInput>
       <SelectInput
         name="status"
@@ -46,9 +46,9 @@
         {form}
         options={DeviceStatus.options}
         bind:value={$formData.status}
-        placeholder="Select status"
+        placeholder={$t('select-status')}
       >
-        status
+        {$t('status')}
       </SelectInput>
     </div>
   </div>

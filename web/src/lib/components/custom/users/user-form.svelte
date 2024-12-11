@@ -8,6 +8,7 @@
   import { createForm } from '../form/form-utils';
   import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
+  import { _ as t } from 'svelte-i18n';
 
   export let data: User;
   export let readonly = false;
@@ -21,13 +22,13 @@
     <Card.Footer>
       <div class="flex w-full">
         <Button class="ml-auto" type="submit">
-          <slot name="button">Update</slot>
+          <slot name="button">{$t('update')}</slot>
         </Button>
       </div>
     </Card.Footer>
   </svelte:fragment>
   <svelte:fragment slot="title">
-    <slot name="title">Edit user</slot>
+    <slot name="title">{$t('edit-user')}</slot>
   </svelte:fragment>
 
   <!-- content here -->
@@ -35,7 +36,7 @@
     <!-- Product Name -->
     <div>
       <StringInput name="person.lastname" {readonly} {form} bind:value={$formData.person.lastname}>
-        lastname
+        {$t('lastname')}
       </StringInput>
       <StringInput
         name="person.middlename"
@@ -43,7 +44,7 @@
         {form}
         bind:value={$formData.person.middlename}
       >
-        middlename
+        {$t('middlename')}
       </StringInput>
       <StringInput
         name="person.firstname"
@@ -51,7 +52,7 @@
         {form}
         bind:value={$formData.person.firstname}
       >
-        firstname
+        {$t('firstname')}
       </StringInput>
       <SelectInput
         name="person.gender"
@@ -61,7 +62,7 @@
         bind:value={$formData.person.gender}
         placeholder="Select Gender"
       >
-        Gender
+        {$t('gender')}
       </SelectInput>
       <div>
         <DateInput
@@ -71,18 +72,13 @@
           bind:value={$formData.person.dateofbirth}
           placeholder="Pick dateofbirth"
         >
-          dateofbirthe
+          {$t('dateofbirth')}
         </DateInput>
       </div>
     </div>
     <div>
-      <StringInput
-        name="username"
-        {readonly}
-        {form}
-        bind:value={$formData.username}
-      >
-        insurancepolicynumber
+      <StringInput name="username" {readonly} {form} bind:value={$formData.username}>
+        {$t('insurancepolicynumber')}
       </StringInput>
 
       <StringInput
@@ -91,15 +87,15 @@
         {form}
         bind:value={$formData.person.phonenumber}
       >
-        phonenumber
+        {$t('phonenumber')}
       </StringInput>
 
       <StringInput name="person.email" {readonly} {form} bind:value={$formData.person.email}>
-        email
+        {$t('email')}
       </StringInput>
 
       <StringInput name="person.address" {readonly} {form} bind:value={$formData.person.address}>
-        address
+        {$t('address')}
       </StringInput>
     </div>
   </div>

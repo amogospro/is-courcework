@@ -21,15 +21,17 @@
   import DateInput from '$lib/components/custom/form/date-input.svelte';
   import { goto } from '$app/navigation';
 
+  import { _ as t } from 'svelte-i18n';
+
   export const signUpSchema = z
     .object({
       username: z.string().min(6),
-      password: z.string().min(6, 'Password must be 6 characters long'),
+      password: z.string().min(6, $t('password-must-be-6-characters-long')),
       password2: z.string(),
       person: PersonSchema
     })
     .refine((data) => data.password === data.password2, {
-      message: 'Passwords must match',
+      message: $t('passwords-must-match'),
       path: ['password2']
     });
 
@@ -63,12 +65,12 @@
           password,
           person
         });
-        toast.success('Registration successful');
+        toast.success($t('registration-successful'));
 
         goto('/login');
         // toast.success(`You submitted ${JSON.stringify(f.data, null, 2)}`);
       } else {
-        toast.error('Please fix the errors in the form.');
+        toast.error($t('please-fix-the-errors-in-the-form'));
       }
     },
     onSubmit(input) {},
@@ -85,14 +87,14 @@
   <form use:enhance on:submit|preventDefault|stopPropagation class="w-full max-w-[500px] space-y-6">
     <Card.Root class="w-full max-w-[500px]">
       <Card.Header>
-        <Card.Title>Register</Card.Title>
+        <Card.Title>{$t('register')}</Card.Title>
       </Card.Header>
       <Card.Content>
         <div class="grid grid-cols-2 gap-10">
           <div>
             <Field {form} name="username">
               <Control let:attrs>
-                <Label>Username</Label>
+                <Label>{$t('username')}</Label>
                 <Input {...attrs} bind:value={$formData.username} />
               </Control>
               <FieldErrors />
@@ -100,14 +102,14 @@
 
             <Field {form} name="password">
               <Control let:attrs>
-                <Label>Password</Label>
+                <Label>{$t('password')}</Label>
                 <Input {...attrs} type="password" bind:value={$formData.password} />
               </Control>
               <FieldErrors />
             </Field>
             <Field {form} name="password2">
               <Control let:attrs>
-                <Label>Confirm password</Label>
+                <Label>{$t('confirm-password')}</Label>
                 <Input {...attrs} type="password" bind:value={$formData.password2} />
               </Control>
               <FieldErrors />
@@ -116,51 +118,51 @@
 
           <div>
             <StringInput name="person.lastname" {form} bind:value={$formData.person.lastname}>
-              lastname
+              {$t('lastname')}
             </StringInput>
             <StringInput name="person.middlename" {form} bind:value={$formData.person.middlename}>
-              middlename
+              {$t('middlename')}
             </StringInput>
             <StringInput name="person.firstname" {form} bind:value={$formData.person.firstname}>
-              firstname
+              {$t('firstname')}
             </StringInput>
             <SelectInput
               name="person.gender"
               {form}
               options={Gender.options}
               bind:value={$formData.person.gender}
-              placeholder="Select Gender"
+              placeholder={$t('select-gender')}
             >
-              Gender
+              {$t('gender')}
             </SelectInput>
             <div>
               <DateInput
                 name="person.dateofbirth"
                 {form}
                 bind:value={$formData.person.dateofbirth}
-                placeholder="Pick dateofbirth"
+                placeholder={$t('pick-dateofbirth')}
               >
-                dateofbirthe
+                {$t('dateofbirth')}
               </DateInput>
             </div>
             <StringInput name="person.phonenumber" {form} bind:value={$formData.person.phonenumber}>
-              phonenumber
+              {$t('phonenumber')}
             </StringInput>
 
             <StringInput name="person.email" {form} bind:value={$formData.person.email}>
-              email
+              {$t('email')}
             </StringInput>
 
             <StringInput name="person.address" {form} bind:value={$formData.person.address}>
-              address
+              {$t('address')}
             </StringInput>
           </div>
         </div>
 
-        <Link href="{base}/login">Login instead</Link>
+        <Link href="{base}/login">{$t('login-instead')}</Link>
       </Card.Content>
       <Card.Footer>
-        <Button type="submit">Register</Button>
+        <Button type="submit">{$t('register')}</Button>
       </Card.Footer>
     </Card.Root>
   </form>

@@ -5,7 +5,12 @@
   import * as Popover from '$lib/components/ui/popover/index.js';
   import { Button } from '$lib/components/ui/button';
   import CalendarIcon from 'lucide-svelte/icons/calendar';
-  import { type DateValue, ZonedDateTime, parseAbsoluteToLocal } from '@internationalized/date';
+  import {
+    type DateValue,
+    ZonedDateTime,
+    getLocalTimeZone,
+    parseAbsoluteToLocal
+  } from '@internationalized/date';
   import { cn } from '$lib/utils';
   import { Calendar } from '$lib/components/ui/calendar/index.js';
   import { onMount } from 'svelte';
@@ -38,7 +43,16 @@
 
   const onRawUpdate = (raw_date: DateValue) => {
     if (!date) {
-      date = parseAbsoluteToLocal(raw_date.toString());
+      date = new ZonedDateTime(
+        raw_date.year,
+        raw_date.month,
+        raw_date.day,
+        getLocalTimeZone(),
+        10800000
+        // hour,
+        // minute
+      );
+      //   date = parseAbsoluteToLocal(raw_date.toString());
     }
     date = date.set({
       minute,
