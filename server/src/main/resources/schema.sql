@@ -83,6 +83,7 @@ CREATE TABLE Study
     DeviceID  INTEGER     NOT NULL REFERENCES Device (ID) ON DELETE SET NULL,
     Status    VARCHAR(20) NOT NULL DEFAULT 'Planned',
     CONSTRAINT chk_status CHECK (Status IN ('Planned', 'Canceled', 'Successed')),
+    DicomID   VARCHAR,
     Notes     TEXT
 );
 -- Create the DeviceComment table

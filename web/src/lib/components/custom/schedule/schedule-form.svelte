@@ -61,12 +61,6 @@
       </DateTimeInput>
     </div>
     <StudyInput {form} name="studyid" bind:id={$formData.studyid} bind:study={$formData.study} />
-    <UserInput
-      {form}
-      name="scheduledbyuserid"
-      bind:id={$formData.scheduledbyuserid}
-      bind:user={$formData.scheduledbyuser}
-    />
     <div>
       <StringInput area name="comments" {readonly} {form} bind:value={$formData.comments}>
         {$t('comments')}

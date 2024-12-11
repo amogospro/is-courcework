@@ -15,6 +15,7 @@
   import { type ColsFn } from '$lib/components/custom/table/table';
   import Table from '$lib/components/custom/table/data-table.svelte';
   import { _ as t } from 'svelte-i18n';
+  import DicomLink from './dicom-link.svelte';
 
   export let patients = writable<Study[]>([]);
   export let readonly = false;
@@ -77,6 +78,22 @@
       accessor: 'notes',
       id: 'notes',
       header: $t('notes')
+    }),
+
+    table.column({
+      accessor: (item) => item,
+      id: 'dicomid',
+      header: $t('image'),
+      cell: (item) => {
+        console.log(item);
+        const dicomid = (item.value as any).dicomid;
+        const id = item.value.id;
+        return createRender(DicomLink, {
+          dicomid,
+          id,
+          refetch
+        });
+      }
     }),
 
     // table.column({

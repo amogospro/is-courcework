@@ -97,5 +97,9 @@
   "event-created": "Event created",
   "hi": "Hi",
   "you-are": "you are",
-  "roles": "Roles"
+  "roles": "Roles",
+  "image": "Image",
+  "upload": "Upload",
+  "open": "Open",
+  "select-file": "Select file"
 }

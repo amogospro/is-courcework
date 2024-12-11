@@ -65,6 +65,8 @@ export const StudySchema = z.object({
   deviceid: z.number().int().positive('Device must be selected'),
   device: DeviceSchema.optional(),
 
+  dicomid: z.number().int().optional().nullable(),
+
   status: StudyStatus,
   notes: z.string()
 });
@@ -78,8 +80,8 @@ export const ScheduleSchema = z.object({
 
   studyid: z.number().int().positive('Study must be selected'),
   study: z.any().optional(),
-  scheduledbyuserid: z.number().int().positive('User must be selected'),
-  scheduledbyuser: z.any().optional(),
+  // scheduledbyuserid: z.number().int().positive('User must be selected'),
+  // scheduledbyuser: z.any().optional(),
   comments: z.string()
 });
 export type Schedule = z.infer<typeof ScheduleSchema> & {

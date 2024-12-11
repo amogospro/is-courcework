@@ -34,6 +34,10 @@ public class Study {
     @Column(name = "status", nullable = false, length = 20)
     private String status;
 
+
+    @Column(name = "dicomid")
+    private String dicomid;
+
     @Column(name = "notes", length = Integer.MAX_VALUE)
     private String notes;
 
@@ -85,6 +89,14 @@ public class Study {
         this.notes = notes;
     }
 
+    public String getDicomid() {
+        return dicomid;
+    }
+
+    public void setDicomid(String dicomid) {
+        this.dicomid = dicomid;
+    }
+
     public StudyResponse toResponse() {
         StudyResponse response = new StudyResponse();
         response.setId(id);
@@ -93,6 +105,7 @@ public class Study {
         response.setDevice(device);
         response.setStatus(status);
         response.setNotes(notes);
+        response.setDicomid(dicomid);
 
         return response;
     }

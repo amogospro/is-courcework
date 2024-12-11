@@ -11,5 +11,44 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d
 
+  pacs:
+    image: jodogne/orthanc-plugins
+    ports:
+      - 8042:8042
+      - 4242:4242
+#    volumes: # don't forget to specify read-only for .json
+#      - ./orthanc.json:/etc/orthanc/orthanc.json:ro
+#      - ./orthanc_db:/var/lib/orthanc/db/
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    networks:
+      - amogusnet
+  #    networks:
+  #      - pacs
+  #    depends_on:
+  #      - orthanc_pg
+
+  ohif_viewer:
+    #    image: ohif/viewer
+    # !!! new
+    image: ohif/app:v3.5.0
+    #    environment:
+    #      PORT: 8080 # default is 80 as it's said in their docs:
+    ports:
+      #      - 3000:8080/tcp  # container's own port is 8080 mapped onto 3000 of the host
+      - 3000:80
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
 volumes:
   postgres_data:
+
+networks:
+  amogusnet:

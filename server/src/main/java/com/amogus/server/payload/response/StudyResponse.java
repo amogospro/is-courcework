@@ -12,6 +12,8 @@ public class StudyResponse {
     private String status;
     private String notes;
 
+    private String dicomid;
+
     public Integer getId() {
         return id;
     }
@@ -58,5 +60,13 @@ public class StudyResponse {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getDicomid() {
+        return dicomid;
+    }
+
+    public void setDicomid(String dicomid) {
+        this.dicomid = dicomid;
     }
 }
