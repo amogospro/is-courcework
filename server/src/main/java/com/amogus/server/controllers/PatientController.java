@@ -1,6 +1,6 @@
 package com.amogus.server.controllers;
 
-import com.amogus.server.dto.PatientRequest;
+import com.amogus.server.payload.request.PatientRequest;
 import com.amogus.server.models.Patient;
 import com.amogus.server.models.Person;
 import com.amogus.server.services.PatientService;
@@ -11,9 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/patients")

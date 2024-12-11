@@ -1,12 +1,14 @@
 package com.amogus.server.models;
 
+import com.amogus.server.payload.response.StudyResponse;
+import com.amogus.server.payload.response.UserResponse;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
-
+import java.util.Set;
 @Entity
 @Table(name = "userprofile")
 public class Userprofile {
@@ -30,6 +32,9 @@ public class Userprofile {
     @ColumnDefault("now()")
     @Column(name = "dateregistered", nullable = false)
     private Instant dateregistered;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<UserRole> userRoles;
 
     public Integer getId() {
         return id;
@@ -71,4 +76,21 @@ public class Userprofile {
         this.dateregistered = dateregistered;
     }
 
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
+
+
+    public UserResponse toResponse() {
+        UserResponse response = new UserResponse();
+        response.setId(id);
+        response.setPerson(person);
+        response.setUsername(username);
+        response.setDateregistered(dateregistered);
+        return response;
+    }
 }

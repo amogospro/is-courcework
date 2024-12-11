@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'svelte-sonner';
 import { writable } from 'svelte/store';
-import type { Device, Patient, Study, Schedule, User } from './types';
+import type { Device, Patient, Study, Schedule, User, Person } from './types';
 // import type { Organization, Person, Product, ProductEdit } from './types';
 // import ReconnectingWebSocket from 'reconnecting-websocket';
 // import { Subject } from 'rxjs';
@@ -53,19 +53,15 @@ export function clearToken() {
 
 // Function to login
 export async function login(credentials: { username: string; password: string }) {
-  const response = await api.post('/auth/login', credentials);
+  const response = await api.post('/auth/signin', credentials);
   const { token } = response.data;
   setToken(token);
   return token;
 }
 
 // Function to register
-export async function register(userData: {
-  username: string;
-  password: string;
-  adminRequest: boolean;
-}) {
-  const response = await api.post('/auth/register', userData);
+export async function register(userData: { username: string; password: string; person: Person }) {
+  const response = await api.post('/auth/signup', userData);
   return response.data;
 }
 
@@ -80,7 +76,15 @@ api.interceptors.request.use(function (config) {
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    toast.error(String((error.response?.data as { message: string })?.message ?? error.message));
+    toast.error(
+      String(
+        (error.response?.data as { message: string })?.message ??
+          (typeof error.response?.data === 'string' && error.response?.data.length > 0
+            ? error.response?.data
+            : null) ??
+          error.message
+      )
+    );
     console.log(error);
     return Promise.reject(error);
   }

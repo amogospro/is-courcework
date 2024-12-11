@@ -3,7 +3,7 @@
   import { Input } from '$lib/components/ui/input';
   import { type FormPath, type SuperForm } from 'sveltekit-superforms/client';
   import { Textarea } from '$lib/components/ui/textarea/index.js';
-  export let readonly;
+  export let readonly = false;
 
   type Item = $$Generic<Record<string, unknown>>;
   export let name: FormPath<Item>;

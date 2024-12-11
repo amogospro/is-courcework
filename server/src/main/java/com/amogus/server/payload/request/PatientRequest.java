@@ -1,4 +1,4 @@
-package com.amogus.server.dto;
+package com.amogus.server.payload.request;
 
 import com.amogus.server.models.Person;
 

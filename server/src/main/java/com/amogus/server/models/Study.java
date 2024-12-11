@@ -1,5 +1,6 @@
 package com.amogus.server.models;
 
+import com.amogus.server.payload.response.StudyResponse;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -84,4 +85,15 @@ public class Study {
         this.notes = notes;
     }
 
+    public StudyResponse toResponse() {
+        StudyResponse response = new StudyResponse();
+        response.setId(id);
+        response.setPatient(patient);
+        response.setUser(user.toResponse());
+        response.setDevice(device);
+        response.setStatus(status);
+        response.setNotes(notes);
+
+        return response;
+    }
 }

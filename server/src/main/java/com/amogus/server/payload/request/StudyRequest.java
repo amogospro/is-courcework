@@ -1,4 +1,4 @@
-package com.amogus.server.dto;
+package com.amogus.server.payload.request;
 
 public class StudyRequest {
     private Integer patientid;

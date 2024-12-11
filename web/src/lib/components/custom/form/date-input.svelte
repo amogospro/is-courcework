@@ -9,7 +9,7 @@
   import { cn } from '$lib/utils';
   import { Calendar } from '$lib/components/ui/calendar/index.js';
   import { onMount } from 'svelte';
-  export let readonly;
+  export let readonly = false;
 
   type Item = $$Generic<Record<string, unknown>>;
   export let name: FormPath<Item>;

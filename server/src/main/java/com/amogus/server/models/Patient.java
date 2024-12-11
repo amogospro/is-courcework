@@ -16,7 +16,7 @@ public class Patient {
     @OneToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "personid", nullable = false)
-    private com.amogus.server.models.Person person;
+    private Person person;
 
     @Column(name = "insurancepolicynumber", length = Integer.MAX_VALUE)
     private String insurancepolicynumber;
@@ -29,11 +29,11 @@ public class Patient {
         this.id = id;
     }
 
-    public com.amogus.server.models.Person getPerson() {
+    public Person getPerson() {
         return person;
     }
 
-    public void setPerson(com.amogus.server.models.Person person) {
+    public void setPerson(Person person) {
         this.person = person;
     }
 

@@ -1,8 +1,8 @@
-package com.amogus.server.dto;
+package com.amogus.server.payload.request;
 
 import java.time.Instant;
 
-public class CreateScheduleDTO {
+public class CreateSchedule {
     private Instant starttime;
     private Instant endtime;
     private Integer studyid;

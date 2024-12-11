@@ -4,7 +4,7 @@
   import { type FormPath, type SuperForm } from 'sveltekit-superforms/client';
   import * as Select from '$lib/components/ui/select';
 
-  export let readonly;
+  export let readonly = false;
 
   type Item = $$Generic<Record<string, unknown>>;
   export let name: FormPath<Item>;

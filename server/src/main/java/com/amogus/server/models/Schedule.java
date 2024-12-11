@@ -58,11 +58,11 @@ public class Schedule {
         this.endtime = endtime;
     }
 
-    public com.amogus.server.models.Study getStudy() {
+    public Study getStudy() {
         return study;
     }
 
-    public void setStudy(com.amogus.server.models.Study studyid) {
+    public void setStudy(Study studyid) {
         this.study = studyid;
     }
 

@@ -15,13 +15,13 @@ public class UserRole {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "userid", nullable = false)
-    private Userprofile userid;
+    private Userprofile user;
 
     @MapsId("roleid")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "roleid", nullable = false)
-    private Role roleid;
+    private Role role;
 
     public UserRoleId getId() {
         return id;
@@ -31,20 +31,20 @@ public class UserRole {
         this.id = id;
     }
 
-    public Userprofile getUserid() {
-        return userid;
+    public Userprofile getUser() {
+        return user;
     }
 
-    public void setUserid(Userprofile userid) {
-        this.userid = userid;
+    public void setUser(Userprofile userid) {
+        this.user = userid;
     }
 
-    public Role getRoleid() {
-        return roleid;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleid(Role roleid) {
-        this.roleid = roleid;
+    public void setRole(Role roleid) {
+        this.role = roleid;
     }
 
 }

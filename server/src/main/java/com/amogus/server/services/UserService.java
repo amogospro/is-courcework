@@ -1,7 +1,7 @@
 package com.amogus.server.services;
 
 import com.amogus.server.models.Userprofile;
-import com.amogus.server.repositories.UserRepository;
+import com.amogus.server.repositories.UserProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserProfileRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserProfileRepository userRepository) {
         this.userRepository = userRepository;
     }
 
