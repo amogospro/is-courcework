@@ -159,7 +159,7 @@
           onSubmit={async (data) => {
             console.log(data);
             await createSchedule(data);
-            toast.info($t('patient-created'));
+            toast.info($t('event-created'));
             // refetch();
           }}
           data={{

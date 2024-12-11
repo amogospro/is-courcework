@@ -1,5 +1,6 @@
 package com.amogus.server.models;
 
+import com.amogus.server.payload.response.RoleResponse;
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -47,4 +48,12 @@ public class UserRole {
         this.role = roleid;
     }
 
+    public RoleResponse toResponse() {
+        RoleResponse roleResponse = new RoleResponse();
+        roleResponse.setId(role.getId());
+        roleResponse.setRolename(role.getRolename());
+        roleResponse.setDescription(role.getDescription());
+        
+        return roleResponse;
+    }
 }

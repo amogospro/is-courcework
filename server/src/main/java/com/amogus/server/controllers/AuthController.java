@@ -10,6 +10,7 @@ import com.amogus.server.repositories.UserRoleRepository;
 import com.amogus.server.security.JwtUtils;
 import com.amogus.server.services.DeviceService;
 import com.amogus.server.services.PersonService;
+import com.amogus.server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.authentication.*;
@@ -39,6 +40,8 @@ public class AuthController {
     RoleRepository roleRepository;
 
     private final PersonService personService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public AuthController(PersonService personService) {
@@ -91,23 +94,7 @@ public class AuthController {
 
         userProfileRepository.save(user);
 
-        // Assuming you have a method to find a Person by ID or create one
-        // user.setPerson(personService.findById(signUpRequest.getPersonId()));
-        // For simplicity, let's assume person is already handled
-
-        userProfileRepository.save(user);
-
-        // Assign default role
-        Role userRole = roleRepository.findByRolename("Врач")
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-
-        UserRole userRoleEntry = new UserRole();
-        userRoleEntry.setId(new UserRoleId());
-        userRoleEntry.getId().setUserid(user.getId());
-        userRoleEntry.getId().setRoleid(userRole.getId());
-        userRoleEntry.setUser(user);
-        userRoleEntry.setRole(userRole);
-        userRoleRepository.save(userRoleEntry);
+        userService.addRole(user, "Врач");
 
         return ResponseEntity.ok("User registered successfully!");
     }

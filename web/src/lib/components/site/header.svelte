@@ -6,14 +6,14 @@
   import { toggleMode } from 'mode-watcher';
   import Link from '../ui/link/link.svelte';
   import _ from 'lodash';
-  import { clearToken, role, username } from '$lib/api';
+  import { clearUserData, roles, username } from '$lib/api';
   import { goto } from '$app/navigation';
   import { base } from '$app/paths';
   import { _ as t } from 'svelte-i18n';
   import { get, derived } from 'svelte/store';
   import { locale, locales } from 'svelte-i18n';
   function logOut() {
-    clearToken();
+    clearUserData();
     goto(`${base}/login`);
   }
 
@@ -43,18 +43,14 @@
       <nav class="gap-10px flex items-center">
         <div class="gap-10px flex">
           <p>
-            Hi
+            {$t('hi')}
             {#if $username != null}
-              {$username}, you are
+              {$username}, {$t('you-are')}
             {/if}
-            {#if $role != null}
-              {_.startCase(_.toLower($role))}
+            {#if $roles != null}
+              {$roles}
             {/if}
           </p>
-
-          {#if _.lowerCase($role) === 'admin'}
-            <Link class="ml-10px" href="{base}/admin">{$t('pending-requests')}</Link>
-          {/if}
         </div>
         <Button on:click={logOut} variant="outline" size="icon">
           <Exit

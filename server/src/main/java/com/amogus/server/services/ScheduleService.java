@@ -1,5 +1,6 @@
 package com.amogus.server.services;
 
+import com.amogus.server.models.Userprofile;
 import com.amogus.server.payload.request.CreateSchedule;
 import com.amogus.server.payload.request.ScheduleRequest;
 import com.amogus.server.models.Schedule;
@@ -24,8 +25,8 @@ public class ScheduleService {
     @Autowired
     private UserProfileRepository userRepository;
 
-    public List<ScheduleResponse> getSchedules(Instant start, Instant end) {
-        return scheduleRepository.findAllByStarttimeBetween(start, end).stream().map(this::convertToResponse)
+    public List<ScheduleResponse> getSchedules(Instant start, Instant end, Userprofile user) {
+        return scheduleRepository.findAllByStarttimeBetween(start, end, user).stream().map(this::convertToResponse)
                 .collect(Collectors.toList());
     }
 
@@ -33,18 +34,18 @@ public class ScheduleService {
         return scheduleRepository.findById(id).map(this::convertToDTO).orElseThrow(() -> new RuntimeException("Schedule not found"));
     }
 
-    public ScheduleRequest createSchedule(CreateSchedule dto) {
+    public ScheduleRequest createSchedule(CreateSchedule dto, Userprofile user) {
         Schedule schedule = new Schedule();
         schedule.setStarttime(dto.getStarttime());
         schedule.setEndtime(dto.getEndtime());
         schedule.setStudy(studyRepository.findById(dto.getStudyid()).orElseThrow(() -> new RuntimeException("Study not found")));
-        schedule.setScheduledbyuser(userRepository.findById(dto.getScheduledbyuserid()).orElseThrow(() -> new RuntimeException("User not found")));
+        schedule.setScheduledbyuser(user);
         schedule.setComments(dto.getComments());
         return convertToDTO(scheduleRepository.save(schedule));
     }
 
 
-    public ScheduleRequest updateSchedule(Integer id, CreateSchedule dto) {
+    public ScheduleRequest updateSchedule(Integer id, CreateSchedule dto, Userprofile user) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new RuntimeException("Schedule not found"));
         schedule.setStarttime(dto.getStarttime());
         schedule.setEndtime(dto.getEndtime());
@@ -52,8 +53,8 @@ public class ScheduleService {
         if (!dto.getStudyid().equals(schedule.getStudy().getId())) {
             schedule.setStudy(studyRepository.findById(dto.getStudyid()).orElseThrow(() -> new RuntimeException("Study not found")));
         }
-        if (!dto.getScheduledbyuserid().equals(schedule.getScheduledbyuser().getId())) {
-            schedule.setScheduledbyuser(userRepository.findById(dto.getScheduledbyuserid()).orElseThrow(() -> new RuntimeException("User not found")));
+        if (!user.getId().equals(schedule.getScheduledbyuser().getId())) {
+            schedule.setScheduledbyuser(user);
         }
         schedule.setComments(dto.getComments());
         return convertToDTO(scheduleRepository.save(schedule));

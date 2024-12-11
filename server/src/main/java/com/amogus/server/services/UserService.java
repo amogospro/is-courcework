@@ -1,7 +1,12 @@
 package com.amogus.server.services;
 
+import com.amogus.server.models.Role;
+import com.amogus.server.models.UserRole;
+import com.amogus.server.models.UserRoleId;
 import com.amogus.server.models.Userprofile;
+import com.amogus.server.repositories.RoleRepository;
 import com.amogus.server.repositories.UserProfileRepository;
+import com.amogus.server.repositories.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +16,12 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserProfileRepository userRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    UserRoleRepository userRoleRepository;
 
     @Autowired
     public UserService(UserProfileRepository userRepository) {
@@ -37,6 +48,33 @@ public class UserService {
 
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
+    }
+
+
+    public void addRole(Userprofile user, String role) {
+        Role userRole = roleRepository.findByRolename(role)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
+        UserRole userRoleEntry = new UserRole();
+        userRoleEntry.setId(new UserRoleId());
+        userRoleEntry.getId().setUserid(user.getId());
+        userRoleEntry.getId().setRoleid(userRole.getId());
+        userRoleEntry.setUser(user);
+        userRoleEntry.setRole(userRole);
+        userRoleRepository.save(userRoleEntry);
+    }
+
+    public void removeRole(Userprofile user, String role) {
+        Role userRole = roleRepository.findByRolename(role)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
+        UserRole userRoleEntry = new UserRole();
+        userRoleEntry.setId(new UserRoleId());
+        userRoleEntry.getId().setUserid(user.getId());
+        userRoleEntry.getId().setRoleid(userRole.getId());
+        userRoleEntry.setUser(user);
+        userRoleEntry.setRole(userRole);
+        userRoleRepository.delete(userRoleEntry);
     }
 
 

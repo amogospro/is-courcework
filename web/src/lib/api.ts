@@ -3,27 +3,31 @@ import axios, { AxiosError } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'svelte-sonner';
 import { writable } from 'svelte/store';
-import type { Device, Patient, Study, Schedule, User, Person } from './types';
+import type { Device, Patient, Study, Schedule, User, Person, UserWithRoles } from './types';
 // import type { Organization, Person, Product, ProductEdit } from './types';
 // import ReconnectingWebSocket from 'reconnecting-websocket';
 // import { Subject } from 'rxjs';
 export const username = writable<string | null>(null);
-export const role = writable('Guest');
+export const roles = writable<string[]>(['Guest']);
+
+export const getToken = () => localStorage.getItem('jwt_token');
+export const getRoles = (): string[] => JSON.parse(localStorage.getItem('roles') ?? '["Guest"]');
 
 function updateUserDetails() {
-  const token = localStorage.getItem('jwt_token');
+  const token = getToken();
+
   if (token) {
     try {
       const decoded = jwtDecode(token) as unknown as { sub: string; role: string };
       console.log(decoded);
       username.set(decoded.sub as string); // Adjust based on token payload structure
-      role.set(decoded.role as string); // Adjust based on token payload structure
+      roles.set(getRoles()); // Adjust based on token payload structure
     } catch (error) {
       console.error('Error decoding token:', error);
     }
   } else {
     username.set(null);
-    role.set('Guest');
+    roles.set(['Guest']);
   }
 }
 updateUserDetails();
@@ -36,26 +40,23 @@ const api = axios.create({
 });
 
 // Function to save token
-export function setToken(token: string) {
+export function setUserData(token: string, roles: string[]) {
   localStorage.setItem('jwt_token', token);
+  localStorage.setItem('roles', JSON.stringify(roles));
   updateUserDetails();
 }
 
-// Function to get token
-export function getToken() {
-  return localStorage.getItem('jwt_token');
-}
-
-export function clearToken() {
+export function clearUserData() {
   localStorage.removeItem('jwt_token');
+  localStorage.removeItem('roles');
   updateUserDetails();
 }
 
 // Function to login
 export async function login(credentials: { username: string; password: string }) {
   const response = await api.post('/auth/signin', credentials);
-  const { token } = response.data;
-  setToken(token);
+  const { token, roles } = response.data;
+  setUserData(token, roles);
   return token;
 }
 
@@ -337,7 +338,7 @@ export const deleteUser = async (id: number) => {
 };
 
 export const getUsers = async (q = new URLSearchParams()) => {
-  const { data } = await api.get<Response<User[]>>(`/users?${q}`);
+  const { data } = await api.get<Response<UserWithRoles[]>>(`/users?${q}`);
   console.log(data);
   return data;
 };

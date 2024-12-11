@@ -93,5 +93,9 @@
   "patients": "Patients",
   "schedule": "Schedule",
   "studies": "Studies",
-  "users": "Users"
+  "users": "Users",
+  "event-created": "Event created",
+  "hi": "Hi",
+  "you-are": "you are",
+  "roles": "Roles"
 }

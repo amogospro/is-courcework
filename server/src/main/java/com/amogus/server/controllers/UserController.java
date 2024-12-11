@@ -1,7 +1,7 @@
 package com.amogus.server.controllers;
 
 import com.amogus.server.models.Userprofile;
-import com.amogus.server.payload.response.UserResponse;
+import com.amogus.server.payload.response.UserWithRolesResponse;
 import com.amogus.server.services.UserService;
 import com.amogus.server.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
 
 @RestController
 @RequestMapping("/api/users")
@@ -28,9 +30,29 @@ public class UserController {
 
 
     @GetMapping
-    public ResponseEntity<Page<UserResponse>> getAllUsers(Pageable pageable) {
-        Page<UserResponse> patients = userService.getAllUsers(pageable).map(Userprofile::toResponse);
+    public ResponseEntity<Page<UserWithRolesResponse>> getAllUsers(Pageable pageable) {
+        Page<UserWithRolesResponse> patients = userService.getAllUsers(pageable).map(Userprofile::toResponseWithRoles);
         return new ResponseEntity<>(patients, HttpStatus.OK);
+    }
+
+    @PostMapping("/role")
+    public ResponseEntity<?> addRole(
+            @RequestParam() Integer id,
+            @RequestParam() String role
+    ) {
+        Userprofile user = userService.getUserById(id);
+        userService.addRole(user, role);
+        return new ResponseEntity<>("Added", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/role")
+    public ResponseEntity<?> removeRole(
+            @RequestParam() Integer id,
+            @RequestParam() String role
+    ) {
+        Userprofile user = userService.getUserById(id);
+        userService.removeRole(user, role);
+        return new ResponseEntity<>("Removed", HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

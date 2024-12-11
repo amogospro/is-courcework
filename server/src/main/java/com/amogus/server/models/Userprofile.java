@@ -1,7 +1,7 @@
 package com.amogus.server.models;
 
-import com.amogus.server.payload.response.StudyResponse;
 import com.amogus.server.payload.response.UserResponse;
+import com.amogus.server.payload.response.UserWithRolesResponse;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -9,6 +9,8 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 @Entity
 @Table(name = "userprofile")
 public class Userprofile {
@@ -91,6 +93,16 @@ public class Userprofile {
         response.setPerson(person);
         response.setUsername(username);
         response.setDateregistered(dateregistered);
+        return response;
+    }
+
+    public UserWithRolesResponse toResponseWithRoles() {
+        UserWithRolesResponse response = new UserWithRolesResponse();
+        response.setId(id);
+        response.setPerson(person);
+        response.setUsername(username);
+        response.setDateregistered(dateregistered);
+        response.setRoles(userRoles.stream().map(UserRole::toResponse).collect(Collectors.toSet()));
         return response;
     }
 }

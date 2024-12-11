@@ -6,7 +6,6 @@ public class CreateSchedule {
     private Instant starttime;
     private Instant endtime;
     private Integer studyid;
-    private Integer scheduledbyuserid;
     private String comments;
 
     public Instant getStarttime() {
@@ -34,16 +33,6 @@ public class CreateSchedule {
     public void setStudyid(Integer studyid) {
         this.studyid = studyid;
     }
-
-
-    public Integer getScheduledbyuserid() {
-        return scheduledbyuserid;
-    }
-
-    public void setScheduledbyuserid(Integer scheduledbyuserid) {
-        this.scheduledbyuserid = scheduledbyuserid;
-    }
-
 
     public String getComments() {
         return comments;

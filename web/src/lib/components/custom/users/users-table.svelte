@@ -6,7 +6,7 @@
 
   import DataTableActions from '$lib/components/custom/table/data-table-actions.svelte';
   import { Button } from '$lib/components/ui/button';
-  import type { User } from '$lib/types';
+  import type { User, UserWithRoles } from '$lib/types';
   import _ from 'lodash';
   import { toast } from 'svelte-sonner';
   import { createUser, deleteUser, getUsers, updateUser } from '$lib/api';
@@ -15,8 +15,9 @@
   import Table from '$lib/components/custom/table/data-table.svelte';
   import IdActions from '../table/id-actions.svelte';
   import { _ as t } from 'svelte-i18n';
+  import Roles from './roles.svelte';
 
-  export let users = writable<User[]>([]);
+  export let users = writable<UserWithRoles[]>([]);
 
   export let readonly = false;
   export let selected: User | null = null;
@@ -24,7 +25,7 @@
   const fetchFn = getUsers;
   let refetch: () => any;
 
-  const colsFn: ColsFn<User> = (table) => [
+  const colsFn: ColsFn<UserWithRoles> = (table) => [
     ...(id_selector
       ? [
           table.column({
@@ -102,6 +103,19 @@
       header: $t('gender'),
       cell: ({ value }) => value.gender ?? $t('n-a')
     }),
+    table.column({
+      accessor: (item) => item,
+      id: 'roles',
+      header: $t('roles'),
+      cell: (item) => {
+        const id = item.value.id;
+        if (!id) throw new Error('no id');
+        return createRender(Roles, {
+          data: item.value,
+          refetch
+        });
+      }
+    }),
     ...(!readonly
       ? [
           table.column({
@@ -141,39 +155,5 @@
 </script>
 
 <div>
-  {#if !readonly}
-    <div class="gap-10px flex items-end py-4">
-      <Dialog.Root>
-        <Dialog.Trigger class="ml-auto">
-          <Button>{$t('new-user')}</Button>
-        </Dialog.Trigger>
-        <Dialog.Content class="w-full max-w-[1500px]">
-          <UserForm
-            onSubmit={async (data) => {
-              console.log(data);
-              await createUser(data);
-              toast.info($t('user-created'));
-              refetch();
-            }}
-            data={{
-              person: {
-                firstname: '',
-                lastname: '',
-                dateofbirth: '',
-                phonenumber: '',
-                email: '',
-                address: '',
-                gender: 'O'
-              },
-              username: ''
-            }}
-          >
-            <svelte:fragment slot="title">{$t('create-new-user')}</svelte:fragment>
-            <svelte:fragment slot="button">{$t('create')}</svelte:fragment>
-          </UserForm>
-        </Dialog.Content>
-      </Dialog.Root>
-    </div>
-  {/if}
   <Table {colsFn} {fetchFn} items={users} bind:refetch />
 </div>

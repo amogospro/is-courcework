@@ -32,6 +32,13 @@ export const UserSchema = z.object({
   username: z.string().min(1)
 });
 export type User = z.infer<typeof UserSchema>;
+export type UserWithRoles = User & {
+  roles: {
+    id: number;
+    rolename: string;
+    description: string;
+  }[];
+};
 
 // device
 export const DeviceStatus = z.enum(['Работает', 'Неисправно', 'В обслуживании']);
