@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class DeviceController {
 
     // Create or update a device
     @PostMapping
+    @PreAuthorize("hasAuthority('Техперсонал')")
     public ResponseEntity<DeviceResponse> createDevice(@RequestBody Device device) {
         DeviceResponse savedDevice = deviceService.createDevice(device);
         return new ResponseEntity<>(savedDevice, HttpStatus.CREATED);
@@ -45,6 +47,7 @@ public class DeviceController {
 
     // Get a device by its ID
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Техперсонал')")
     public ResponseEntity<DeviceResponse> getDeviceById(@PathVariable Integer id) {
         DeviceResponse device = deviceService.getDeviceById(id).toResponse();
         return new ResponseEntity<>(device, HttpStatus.OK);
@@ -54,6 +57,7 @@ public class DeviceController {
     // Update a device by its ID
     @PutMapping("/{id}")
     @Transactional
+    @PreAuthorize("hasAuthority('Техперсонал')")
     public ResponseEntity<DeviceResponse> updateDevice(
             @PathVariable Integer id, @RequestBody Device device,
             Authentication authentication
@@ -64,6 +68,7 @@ public class DeviceController {
 
     // Delete a device by its ID
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Техперсонал')")
     public ResponseEntity<Void> deleteDevice(@PathVariable Integer id) {
         Device device = deviceService.getDeviceById(id);
         if (device != null) {

@@ -34,7 +34,7 @@
   </svelte:fragment>
 
   <!-- content here -->
-  <div class="grid w-full grid-cols-2 gap-10">
+  <div class="grid w-full grid-cols-1 gap-10">
     <!-- Product Name -->
     <div>
       <SelectInput

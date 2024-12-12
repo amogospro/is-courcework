@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -34,21 +35,25 @@ public class StudyController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Врач')")
     public ResponseEntity<StudyDataResponse> getStudyById(@PathVariable Integer id) {
         return ResponseEntity.ok(studyService.getStudyDataById(id));
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('Врач')")
     public ResponseEntity<Study> createStudy(@RequestBody StudyRequest study) {
         return ResponseEntity.ok(studyService.createStudy(study));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('Врач')")
     public ResponseEntity<Study> updateStudy(@PathVariable Integer id, @RequestBody StudyRequest study) {
         return ResponseEntity.ok(studyService.updateStudy(id, study));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Врач')")
     public ResponseEntity<Void> deleteStudy(@PathVariable Integer id) {
         studyService.deleteStudy(id);
         return ResponseEntity.ok().build();

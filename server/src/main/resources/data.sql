@@ -19,15 +19,15 @@ VALUES
 -- Предполагается, что ID пользователей в таблице Person начинаются с 1
 INSERT INTO UserProfile (PersonID, Username, PasswordHash, DateRegistered)
 VALUES
-    (1, 'ivanov', 'hashed_password1', NOW()),
-    (2, 'petrova', 'hashed_password2', NOW()),
-    (3, 'smirnov', 'hashed_password3', NOW());
+    (1, 'admin', '$2a$10$7DO2tMe6QSZw7/qpTug3uuoSX7FYhnPMvJ6sSENxvtu5gQBoi2svi', NOW()),
+    (2, 'medic', '$2a$10$7DO2tMe6QSZw7/qpTug3uuoSX7FYhnPMvJ6sSENxvtu5gQBoi2svi', NOW()),
+    (3, 'service', '$2a$10$7DO2tMe6QSZw7/qpTug3uuoSX7FYhnPMvJ6sSENxvtu5gQBoi2svi', NOW());
 -- Заполнение таблицы UserRole
 INSERT INTO UserRole (UserID, RoleID)
 VALUES
-    (1, 1), -- Иванов - Администратор
-    (2, 2), -- Петрова - Врач
-    (3, 3); -- Смирнов - Техперсонал
+    (1, 1), -- admin - Администратор
+    (2, 2), -- medic - Врач
+    (3, 3); -- service - Техперсонал
 -- Заполнение таблицы Patient
 -- ID пациентов в таблице Person начинаются с 4
 INSERT INTO Patient (PersonID, InsurancePolicyNumber)

@@ -33,11 +33,24 @@
 >
   <div class="container flex h-14 max-w-screen-2xl items-center gap-2">
     <h1 class="text-xl font-bold">{$t('kursovaya-rabota')}</h1>
-    <Link href="{base}/devices">{$t('devices')}</Link>
-    <Link href="{base}/patients">{$t('patients')}</Link>
-    <Link href="{base}/schedule">{$t('schedule')}</Link>
-    <Link href="{base}/studies">{$t('studies')}</Link>
-    <Link href="{base}/users">{$t('users')}</Link>
+    <!-- Врач,Администратор,Техперсонал -->
+
+    {#if $roles.includes('Техперсонал')}
+      <Link href="{base}/devices">{$t('devices')}</Link>
+    {/if}
+    {#if $roles.includes('Врач')}
+      <Link href="{base}/patients">{$t('patients')}</Link>
+    {/if}
+
+    {#if $roles.includes('Врач') || $roles.includes('Администратор')}
+      <Link href="{base}/schedule">{$t('schedule')}</Link>
+    {/if}
+    {#if $roles.includes('Врач')}
+      <Link href="{base}/studies">{$t('studies')}</Link>
+    {/if}
+    {#if $roles.includes('Администратор')}
+      <Link href="{base}/users">{$t('users')}</Link>
+    {/if}
 
     <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
       <nav class="gap-10px flex items-center">

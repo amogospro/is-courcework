@@ -91,10 +91,12 @@ public class AuthController {
 
         Person person = personService.createPerson(signUpRequest.getPerson());
         user.setPerson(person);
-
         userProfileRepository.save(user);
 
-        userService.addRole(user, "Врач");
+        Userprofile first = userService.getUserById(1);
+        if (first == null) {
+            userService.addRole(user, "Администратор");
+        }
 
         return ResponseEntity.ok("User registered successfully!");
     }

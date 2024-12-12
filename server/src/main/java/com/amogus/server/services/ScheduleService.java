@@ -1,5 +1,6 @@
 package com.amogus.server.services;
 
+import com.amogus.server.models.UserRole;
 import com.amogus.server.models.Userprofile;
 import com.amogus.server.payload.request.CreateSchedule;
 import com.amogus.server.payload.request.ScheduleRequest;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +28,24 @@ public class ScheduleService {
     private UserProfileRepository userRepository;
 
     public List<ScheduleResponse> getSchedules(Instant start, Instant end, Userprofile user) {
+
+        boolean medic = false;
+        for (UserRole role : user.getUserRoles()) {
+            if (Objects.equals(role.getRole().getRolename(), "Врач")) {
+                medic = true;
+                break;
+            }
+        }
+        for (UserRole role : user.getUserRoles()) {
+            if (Objects.equals(role.getRole().getRolename(), "Администратор")) {
+                medic = false;
+                break;
+            }
+        }
+        if (medic) {
+            return scheduleRepository.findAllByStarttimeBetweenMedic(start, end, user).stream().map(this::convertToResponse)
+                    .collect(Collectors.toList());
+        }
         return scheduleRepository.findAllByStarttimeBetween(start, end, user).stream().map(this::convertToResponse)
                 .collect(Collectors.toList());
     }

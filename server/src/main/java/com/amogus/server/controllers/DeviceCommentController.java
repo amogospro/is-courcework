@@ -9,6 +9,7 @@ import com.amogus.server.services.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class DeviceCommentController {
 
     // Create a new comment
     @PostMapping
+    @PreAuthorize("hasAuthority('Техперсонал')")
     public ResponseEntity<DeviceComment> createComment(
             @RequestParam() Integer deviceid,
             @RequestBody String deviceComment,
@@ -50,6 +52,7 @@ public class DeviceCommentController {
 
     // Get a comment by ID
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Техперсонал')")
     public ResponseEntity<DeviceComment> getCommentById(@PathVariable Integer id) {
         Optional<DeviceComment> comment = deviceCommentService.getCommentById(id);
         return comment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -57,6 +60,7 @@ public class DeviceCommentController {
 
     // Update a comment by ID
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('Техперсонал')")
     public ResponseEntity<DeviceComment> updateComment(
             @PathVariable Integer id, @RequestBody DeviceComment deviceComment) {
         DeviceComment updatedComment = deviceCommentService.updateComment(id, deviceComment);
@@ -65,6 +69,7 @@ public class DeviceCommentController {
 
     // Delete a comment by ID
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Техперсонал')")
     public ResponseEntity<Void> deleteComment(@PathVariable Integer id) {
         return deviceCommentService.deleteComment(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +20,7 @@ public class DicomController {
     private OrthancService orthancService;
 
     @PostMapping("/upload/{id}")
+    @PreAuthorize("hasAuthority('Врач')")
     public ResponseEntity<?> uploadDicom(@RequestParam("file") MultipartFile file, @PathVariable("id") Integer studyId) {
         try {
             String response = orthancService.uploadDicom(file, studyId);
@@ -29,6 +31,7 @@ public class DicomController {
     }
 
     @GetMapping("/download/{id}")
+    @PreAuthorize("hasAuthority('Врач')")
     public ResponseEntity<byte[]> downloadDicomArchive(@PathVariable("id") Integer studyId) {
         try {
             byte[] archiveData = orthancService.downloadDicomArchive(studyId);

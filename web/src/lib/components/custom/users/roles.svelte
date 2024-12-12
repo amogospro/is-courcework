@@ -6,11 +6,8 @@
   import Plus from 'lucide-svelte/icons/plus';
   import X from 'lucide-svelte/icons/x';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-  import SelectInput from '../form/select-input.svelte';
-  import { createForm } from '../form/form-utils';
-  import z from 'zod';
   import { toast } from 'svelte-sonner';
-
+  import { _ as t } from 'svelte-i18n';
   import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
   import { Label } from '$lib/components/ui/label/index.js';
   export let data: UserWithRoles;
@@ -49,7 +46,7 @@
       <Button variant="ghost" size="sm" builders={[builder]}><Plus size="14" /></Button>
     </DropdownMenu.Trigger>
     <DropdownMenu.Content class="w-56">
-      <DropdownMenu.Label>Select role</DropdownMenu.Label>
+      <DropdownMenu.Label>{$t('select-role')}</DropdownMenu.Label>
       <DropdownMenu.Separator />
       <div class="p-2">
         <RadioGroup.Root bind:value={role_str}>

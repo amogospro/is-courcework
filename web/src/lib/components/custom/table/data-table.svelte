@@ -98,7 +98,7 @@
 
                       <Input
                         class="max-w-100px"
-                        placeholder="Filter by..."
+                        placeholder={$t('filter-by')}
                         bind:value={filters[cell.id]}
                       />
                     </div>

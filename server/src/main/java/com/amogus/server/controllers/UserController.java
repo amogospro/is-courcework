@@ -36,6 +36,7 @@ public class UserController {
     }
 
     @PostMapping("/role")
+    @PreAuthorize("hasAuthority('Администратор')")
     public ResponseEntity<?> addRole(
             @RequestParam() Integer id,
             @RequestParam() String role
@@ -46,6 +47,7 @@ public class UserController {
     }
 
     @DeleteMapping("/role")
+    @PreAuthorize("hasAuthority('Администратор')")
     public ResponseEntity<?> removeRole(
             @RequestParam() Integer id,
             @RequestParam() String role
@@ -68,7 +70,7 @@ public class UserController {
         return ResponseEntity.ok("Hello, " + username);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Администратор')")
     @GetMapping("/admin")
     public ResponseEntity<?> adminEndpoint() {
         return ResponseEntity.ok("Admin content");

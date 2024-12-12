@@ -101,5 +101,17 @@
   "image": "Image",
   "upload": "Upload",
   "open": "Open",
-  "select-file": "Select file"
+  "select-file": "Select file",
+  "remember-message": "Remember What You're Fighting For and Never Settle for Less Than Your Best!",
+  "use-links-above-to-navigate": "Use links above to navigate",
+  "leave-new-comment": "Leave new comment",
+  "add-comment": "Add comment",
+  "comment-added": "Comment added",
+  "comment-removed": "Comment removed",
+  "no-file-selected": "No file selected.",
+  "file-uploaded-successfully": "File uploaded successfully",
+  "error-uploading-file": "Error uploading file",
+  "edit-profile": "Edit profile",
+  "select-role": "Select role",
+  "filter-by": "Filter by..."
 }

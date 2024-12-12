@@ -96,5 +96,22 @@
   "users": "Пользователи",
   "event-created": "Событие создано",
   "hi": "Здравствуйте",
-  "you-are": "вы"
+  "you-are": "вы",
+  "roles": "Роли",
+  "image": "Изображение",
+  "upload": "Загрузить",
+  "open": "Открыть",
+  "select-file": "Выберите файл",
+  "remember-message": "Помните, ради чего вы боретесь, и никогда не уступайте меньшему, чем ваше лучшее!",
+  "use-links-above-to-navigate": "Используйте ссылки выше для навигации",
+  "leave-new-comment": "Оставить новый комментарий",
+  "add-comment": "Добавить комментарий",
+  "comment-added": "Комментарий добавлен",
+  "comment-removed": "Комментарий удалён",
+  "no-file-selected": "Файл не выбран.",
+  "file-uploaded-successfully": "Файл успешно загружен",
+  "error-uploading-file": "Ошибка загрузки файла",
+  "edit-profile": "Редактировать профиль",
+  "select-role": "Выберите роль ",
+  "filter-by": "Фильтр..."
 }

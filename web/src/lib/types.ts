@@ -74,7 +74,7 @@ export const StudySchema = z.object({
   deviceid: z.number().int().positive('Device must be selected'),
   device: DeviceSchema.optional(),
 
-  dicomid: z.number().int().optional().nullable(),
+  dicomid: z.any().optional().nullable(),
 
   status: StudyStatus,
   notes: z.string()

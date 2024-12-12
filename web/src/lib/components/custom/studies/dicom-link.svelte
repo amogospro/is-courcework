@@ -1,8 +1,6 @@
 <script lang="ts">
   import { Button, buttonVariants } from '$lib/components/ui/button';
-  import Link from '$lib/components/ui/link/link.svelte';
   import { Label } from '$lib/components/ui/label/index.js';
-  import { Input } from '$lib/components/ui/input/index.js';
   import { _ as t } from 'svelte-i18n';
   import * as Dialog from '$lib/components/ui/dialog/index.js';
   import { toast } from 'svelte-sonner';
@@ -17,7 +15,7 @@
   const upload = async () => {
     const file = files[0];
     if (!file) {
-      toast.error('No file selected.');
+      toast.error($t('no-file-selected'));
       return;
     }
 
@@ -29,10 +27,10 @@
           'Content-Type': 'multipart/form-data'
         }
       });
-      toast.info('File uploaded successfully');
+      toast.info($t('file-uploaded-successfully'));
       refetch();
     } catch (error) {
-      toast.error('Error uploading file');
+      toast.error($t('error-uploading-file'));
     }
   };
 </script>
@@ -44,12 +42,6 @@
     <Dialog.Root>
       <Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>{$t('upload')}</Dialog.Trigger>
       <Dialog.Content class="sm:max-w-[425px]">
-        <Dialog.Header>
-          <Dialog.Title>Edit profile</Dialog.Title>
-          <Dialog.Description>
-            Make changes to your profile here. Click save when you're done.
-          </Dialog.Description>
-        </Dialog.Header>
         <div class="grid w-full max-w-sm items-center gap-1.5">
           <Label for="picture">{$t('select-file')}</Label>
           <input id="picture" type="file" bind:files multiple={false} accept=".dcm" />

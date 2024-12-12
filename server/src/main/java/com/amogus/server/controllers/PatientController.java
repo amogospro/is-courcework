@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,12 +34,14 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Врач')")
     public ResponseEntity<Patient> getPatientById(@PathVariable Integer id) {
         Patient patient = patientService.getPatientById(id);
         return new ResponseEntity<>(patient, HttpStatus.OK);
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('Врач')")
     public ResponseEntity<Patient> createPatientWithPerson(@RequestBody PatientRequest patientRequest) {
         // Create the Person first
         Person person = patientRequest.getPerson();
@@ -54,6 +57,7 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('Врач')")
     public ResponseEntity<Patient> updatePatientWithPerson(@PathVariable Integer id, @RequestBody PatientRequest patientRequest) {
         // Fetch the existing patient
         Patient existingPatient = patientService.getPatientById(id);
@@ -87,6 +91,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Врач')")
     public ResponseEntity<Void> deletePatient(@PathVariable Integer id) {
         patientService.deletePatient(id);
         return ResponseEntity.noContent().build();

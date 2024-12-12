@@ -1,18 +1,13 @@
 <script lang="ts">
-  import api, { roles } from '$lib/api';
+  import api from '$lib/api';
   import Badge from '$lib/components/ui/badge/badge.svelte';
   import { Button } from '$lib/components/ui/button';
-  import { Gender, getPersonStuff, type DeviceWithComments, type UserWithRoles } from '$lib/types';
+  import { getPersonStuff, type DeviceWithComments } from '$lib/types';
   import Plus from 'lucide-svelte/icons/plus';
   import X from 'lucide-svelte/icons/x';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-  import SelectInput from '../form/select-input.svelte';
-  import { createForm } from '../form/form-utils';
-  import z from 'zod';
   import { toast } from 'svelte-sonner';
-
-  import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
-  import { Label } from '$lib/components/ui/label/index.js';
+  import { _ as t } from 'svelte-i18n';
   import { Input } from '$lib/components/ui/input';
   export let data: DeviceWithComments;
 
@@ -22,13 +17,13 @@
   const addRole = async () => {
     const res = await api.post(`/devicecomments?deviceid=${data.id}`, comment_text);
     comment_text = '';
-    toast.info('Comment added');
+    toast.info($t('comment-added'));
     refetch();
   };
 
   const removeRole = async (id: number | undefined) => {
     const res = await api.delete(`/devicecomments/${id}`);
-    toast.info('Comment removed');
+    toast.info($t('comment-removed'));
     refetch();
   };
 </script>
@@ -47,7 +42,7 @@
       <Button variant="ghost" size="sm" builders={[builder]}><Plus size="14" /></Button>
     </DropdownMenu.Trigger>
     <DropdownMenu.Content class="w-56">
-      <DropdownMenu.Label>Leave new comment</DropdownMenu.Label>
+      <DropdownMenu.Label>{$t('leave-new-comment')}</DropdownMenu.Label>
       <DropdownMenu.Separator />
       <div class="p-2">
         <Input bind:value={comment_text} />
@@ -55,7 +50,7 @@
 
       <DropdownMenu.Item on:click={addRole}>
         <Plus class="mr-2 h-4 w-4" />
-        <span>Add comment</span>
+        <span>{$t('add-comment')}</span>
       </DropdownMenu.Item>
     </DropdownMenu.Content>
   </DropdownMenu.Root>

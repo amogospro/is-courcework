@@ -16,6 +16,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     List<Schedule> findByScheduledbyuser_Id(Integer scheduledbyuseridId);
 
-    @Query("SELECT s FROM Schedule s WHERE s.starttime >= :start AND s.endtime <= :end AND s.scheduledbyuser = :user")
+    @Query("SELECT s FROM Schedule s WHERE s.starttime >= :start AND s.endtime <= :end")
     List<Schedule> findAllByStarttimeBetween(Instant start, Instant end, Userprofile user);
+
+    @Query("SELECT s FROM Schedule s WHERE s.starttime >= :start AND s.endtime <= :end AND s.study.user = :user")
+    List<Schedule> findAllByStarttimeBetweenMedic(Instant start, Instant end, Userprofile user);
 }

@@ -1,6 +1,5 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms';
-  import SuperDebug from 'sveltekit-superforms';
   import { Field, Control, Label, FieldErrors } from '$lib/components/ui/form';
   import { Input } from '$lib/components/ui/input';
   import * as Card from '$lib/components/ui/card';
@@ -10,14 +9,13 @@
   import { toast } from 'svelte-sonner';
   import { type Infer } from 'sveltekit-superforms/client';
   import { Link } from '$lib/components/ui/link';
-  import { login, register } from '$lib/api';
-  import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
+  import { login } from '$lib/api';
   import { goto } from '$app/navigation';
   import { base } from '$app/paths';
   import { _ as t } from 'svelte-i18n';
 
   export const registerSchema = z.object({
-    username: z.string().min(6),
+    username: z.string().min(2),
     password: z.string().min(6, $t('password-must-be-6-characters-long'))
   });
 
