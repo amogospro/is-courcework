@@ -51,6 +51,9 @@
     {#if $roles.includes('Администратор')}
       <Link href="{base}/users">{$t('users')}</Link>
     {/if}
+    {#if $roles.includes('Администратор')}
+      <Link href="{base}/logs">{$t('logs')}</Link>
+    {/if}
 
     <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
       <nav class="gap-10px flex items-center">

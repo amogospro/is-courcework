@@ -7,7 +7,9 @@ import com.amogus.server.payload.response.JwtResponse;
 import com.amogus.server.repositories.RoleRepository;
 import com.amogus.server.repositories.UserProfileRepository;
 import com.amogus.server.repositories.UserRoleRepository;
+import com.amogus.server.security.CustomUserDetails;
 import com.amogus.server.security.JwtUtils;
+import com.amogus.server.services.AuditLogService;
 import com.amogus.server.services.DeviceService;
 import com.amogus.server.services.PersonService;
 import com.amogus.server.services.UserService;
@@ -42,6 +44,8 @@ public class AuthController {
     private final PersonService personService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private AuditLogService auditLogService;
 
     @Autowired
     public AuthController(PersonService personService) {
@@ -71,6 +75,10 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
+
+        Userprofile user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
+
+        auditLogService.createAuditLog(user, "Вход");
 
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), roles));
     }

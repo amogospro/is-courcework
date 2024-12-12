@@ -97,3 +97,30 @@ export type Schedule = z.infer<typeof ScheduleSchema> & {
   study?: Study;
   scheduledbyuser?: User;
 };
+
+export type AuditLog = {
+  id: number;
+  userid: UserWithRoles;
+  entity: string;
+  entityid: number;
+  timestamp: string;
+  details: string;
+  actiontype: string;
+};
+// export type AuditLog = z.object({
+//   id: any,
+//   patientid: z.number().int().positive('Patient must be selected'),
+//   patient: PatientSchema.optional(),
+
+//   userid: z.number().int().positive('User must be selected'),
+//   user: UserSchema.optional(),
+
+//   deviceid: z.number().int().positive('Device must be selected'),
+//   device: DeviceSchema.optional(),
+
+//   dicomid: z.any().optional().nullable(),
+
+//   status: StudyStatus,
+//   notes: z.string()
+// });
+// export type Study = z.infer<typeof StudySchema>;

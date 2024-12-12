@@ -44,7 +44,7 @@
   } = amogus(items, fetchFn, colsFn);
   export const refetch = () => fetchData($pageSize, $pageIndex, filters);
 
-  $: if (filters) refetch();
+  $: if (filters || $pageSize || $pageIndex) refetch();
   onMount(() => {
     refetch();
   });

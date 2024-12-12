@@ -113,5 +113,9 @@
   "error-uploading-file": "Ошибка загрузки файла",
   "edit-profile": "Редактировать профиль",
   "select-role": "Выберите роль ",
-  "filter-by": "Фильтр..."
+  "filter-by": "Фильтр...",
+  "when": "Когда",
+  "object": "Объект",
+  "actiontype": "Тип действия",
+  "logs": "Журнал"
 }

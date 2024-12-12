@@ -3,7 +3,17 @@ import axios, { AxiosError } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'svelte-sonner';
 import { writable } from 'svelte/store';
-import type { Device, Patient, Study, Schedule, User, Person, UserWithRoles, DeviceWithComments } from './types';
+import type {
+  Device,
+  Patient,
+  Study,
+  Schedule,
+  User,
+  Person,
+  UserWithRoles,
+  DeviceWithComments,
+  AuditLog
+} from './types';
 // import type { Organization, Person, Product, ProductEdit } from './types';
 // import ReconnectingWebSocket from 'reconnecting-websocket';
 // import { Subject } from 'rxjs';
@@ -339,6 +349,12 @@ export const deleteUser = async (id: number) => {
 
 export const getUsers = async (q = new URLSearchParams()) => {
   const { data } = await api.get<Response<UserWithRoles[]>>(`/users?${q}`);
+  console.log(data);
+  return data;
+};
+
+export const getLogs = async (q = new URLSearchParams()) => {
+  const { data } = await api.get<Response<AuditLog[]>>(`/auditlogs?sort=timestamp,desc&${q}`);
   console.log(data);
   return data;
 };

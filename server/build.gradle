@@ -35,6 +35,7 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 
     // Spring Boot Starter Web
     implementation 'org.springframework.boot:spring-boot-starter-web'

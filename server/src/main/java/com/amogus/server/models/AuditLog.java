@@ -1,5 +1,6 @@
 package com.amogus.server.models;
 
+import com.amogus.server.payload.response.AuditLogResponse;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -11,7 +12,8 @@ import java.time.Instant;
 @Table(name = "auditlog")
 public class AuditLog {
     @Id
-    @ColumnDefault("nextval('auditlog_id_seq')")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "auditlog_id_gen")
+    @SequenceGenerator(name = "auditlog_id_gen", sequenceName = "auditlog_id_seq", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -89,5 +91,18 @@ public class AuditLog {
 
     public void setActionType(String status) {
         this.actiontype = status;
+    }
+
+    public AuditLogResponse toResponse() {
+        AuditLogResponse response = new AuditLogResponse();
+        response.setActiontype(actiontype);
+        response.setEntityid(entityid);
+        response.setEntity(entity);
+        response.setUserid(userid.toResponse());
+        response.setDetails(details);
+        response.setTimestamp(timestamp);
+        response.setId(id);
+
+        return response;
     }
 }
