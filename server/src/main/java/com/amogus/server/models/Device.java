@@ -28,7 +28,7 @@ public class Device {
     private String status;
 
 
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<DeviceComment> comments;
 
     public Integer getId() {

@@ -116,3 +116,47 @@ CREATE TABLE AuditLog
     Timestamp  TIMESTAMP      NOT NULL DEFAULT NOW(),
     Details    TEXT
 );
+
+CREATE OR REPLACE FUNCTION get_study_data(p_study_id INTEGER)
+    RETURNS TABLE
+            (
+                study_id          INTEGER,
+                patient_full_name VARCHAR,
+                device_sn         VARCHAR,
+                params            JSON,
+                notes             TEXT
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY
+        SELECT s.ID,
+               CONCAT(p.LastName, ' ', p.FirstName, ' ', COALESCE(p.MiddleName, '')) AS patient_full_name,
+               d.DeviceSN,
+               s.Notes
+        FROM Study s
+                 JOIN Patient pt ON pt.ID = s.PatientID
+                 JOIN Person p ON p.ID = pt.PersonID
+                 LEFT JOIN Device d ON d.ID = s.DeviceID
+        WHERE s.ID = p_study_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_device_status(
+    p_device_id INTEGER,
+    p_new_status DeviceStatusEnum,
+    p_user_id INTEGER,
+    p_comment TEXT
+)
+    RETURNS VOID AS
+$$
+BEGIN
+    UPDATE Device
+    SET Status = p_new_status
+    WHERE ID = p_device_id;
+    IF p_comment IS NOT NULL THEN
+        INSERT INTO DeviceComment (DeviceID, UserID, CommentText)
+        VALUES (p_device_id, p_user_id, p_comment);
+    END IF;
+END;
+$$ LANGUAGE plpgsql;

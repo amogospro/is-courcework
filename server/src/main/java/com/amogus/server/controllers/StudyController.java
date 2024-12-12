@@ -2,6 +2,7 @@ package com.amogus.server.controllers;
 
 import com.amogus.server.payload.request.StudyRequest;
 import com.amogus.server.models.Study;
+import com.amogus.server.payload.response.StudyDataResponse;
 import com.amogus.server.payload.response.StudyResponse;
 import com.amogus.server.services.StudyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ public class StudyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Study> getStudyById(@PathVariable Integer id) {
-        return ResponseEntity.ok(studyService.getStudyById(id));
+    public ResponseEntity<StudyDataResponse> getStudyById(@PathVariable Integer id) {
+        return ResponseEntity.ok(studyService.getStudyDataById(id));
     }
 
     @PostMapping

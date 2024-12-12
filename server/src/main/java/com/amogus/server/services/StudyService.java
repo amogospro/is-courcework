@@ -2,6 +2,7 @@ package com.amogus.server.services;
 
 import com.amogus.server.payload.request.StudyRequest;
 import com.amogus.server.models.Study;
+import com.amogus.server.payload.response.StudyDataResponse;
 import com.amogus.server.payload.response.StudyResponse;
 import com.amogus.server.repositories.DeviceRepository;
 import com.amogus.server.repositories.PatientRepository;
@@ -30,6 +31,10 @@ public class StudyService {
 
     public Study getStudyById(Integer id) {
         return studyRepository.findById(id).orElseThrow(() -> new RuntimeException("Study not found"));
+    }
+
+    public StudyDataResponse getStudyDataById(Integer id) {
+        return studyRepository.getStudyData(id).orElseThrow(() -> new RuntimeException("Study not found"));
     }
 
 

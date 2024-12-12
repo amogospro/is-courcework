@@ -2,13 +2,17 @@ package com.amogus.server.controllers;
 
 import com.amogus.server.models.Device;
 import com.amogus.server.models.Device;
+import com.amogus.server.models.Userprofile;
 import com.amogus.server.payload.response.DeviceResponse;
+import com.amogus.server.security.CustomUserDetails;
 import com.amogus.server.services.DeviceService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,15 +53,13 @@ public class DeviceController {
 
     // Update a device by its ID
     @PutMapping("/{id}")
-    public ResponseEntity<DeviceResponse> updateDevice(@PathVariable Integer id, @RequestBody Device device) {
-        Device existingDevice = deviceService.getDeviceById(id);
-        if (existingDevice != null) {
-            device.setId(id);  // Ensure the ID is set for updating
-            DeviceResponse updatedDevice = deviceService.updateDevice(device);
-            return new ResponseEntity<>(updatedDevice, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @Transactional
+    public ResponseEntity<DeviceResponse> updateDevice(
+            @PathVariable Integer id, @RequestBody Device device,
+            Authentication authentication
+    ) {
+        Userprofile user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
+        return new ResponseEntity<>(deviceService.updateDevice(id, device, user), HttpStatus.OK);
     }
 
     // Delete a device by its ID
