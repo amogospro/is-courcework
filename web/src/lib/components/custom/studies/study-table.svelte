@@ -16,6 +16,7 @@
   import Table from '$lib/components/custom/table/data-table.svelte';
   import { _ as t } from 'svelte-i18n';
   import DicomLink from './dicom-link.svelte';
+  import moment from 'moment';
 
   export let patients = writable<Study[]>([]);
   export let readonly = false;
@@ -53,7 +54,7 @@
     }),
     table.column({
       accessor: 'patient',
-      id: 'patient',
+      id: 'patientName',
       header: $t('patient'),
       cell: ({ value }) => {
         return `${value?.person.firstname ?? $t('n-a')} ${value?.person.middlename ?? $t('n-a')} ${value?.person.lastname ?? $t('n-a')}`;
@@ -61,7 +62,7 @@
     }),
     table.column({
       accessor: 'user',
-      id: 'user',
+      id: 'doctorName',
       header: $t('doctor'),
       cell: ({ value }) => {
         return `${value?.person.firstname ?? $t('n-a')} ${value?.person.middlename ?? $t('n-a')} ${value?.person.lastname ?? $t('n-a')}`;
@@ -95,7 +96,6 @@
         });
       }
     }),
-
     // table.column({
     //   accessor: 'person',
     //   id: 'lastname',
@@ -210,5 +210,11 @@
       </Dialog.Root>
     {/if}
   </div>
-  <Table {colsFn} {fetchFn} items={patients} bind:refetch />
+  <Table
+    filters={{ doctorName: '', patientName: '' }}
+    {colsFn}
+    {fetchFn}
+    items={patients}
+    bind:refetch
+  />
 </div>

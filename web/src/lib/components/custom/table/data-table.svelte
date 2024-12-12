@@ -1,4 +1,8 @@
 <script lang="ts">
+  import _ from 'lodash';
+
+  import { Input } from '$lib/components/ui/input';
+
   import type { Writable } from 'svelte/store';
   import { onMount } from 'svelte';
 
@@ -20,6 +24,7 @@
   export let colsFn: ColsFn<Item>;
   export let readonly = false;
 
+  export let filters: Record<string, string> = {};
   const {
     pageIndex,
     filterValue,
@@ -37,13 +42,9 @@
     rows,
     fetchData
   } = amogus(items, fetchFn, colsFn);
-  export const refetch = () =>
-    fetchData(
-      $pageSize,
-      $pageIndex
-      //  $sortKeys, $filterValue
-    );
+  export const refetch = () => fetchData($pageSize, $pageIndex, filters);
 
+  $: if (filters) refetch();
   onMount(() => {
     refetch();
   });
@@ -91,6 +92,16 @@
                         />
                       {/if}
                     </Button>
+                  {:else if _.has(filters, cell.id)}
+                    <div class="flex items-center gap-2">
+                      <Render of={cell.render()} />
+
+                      <Input
+                        class="max-w-100px"
+                        placeholder="Filter by..."
+                        bind:value={filters[cell.id]}
+                      />
+                    </div>
                   {:else}
                     <Render of={cell.render()} />
                   {/if}

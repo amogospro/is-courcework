@@ -8,9 +8,12 @@ import com.amogus.server.services.StudyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/studies")
@@ -20,8 +23,13 @@ public class StudyController {
     private StudyService studyService;
 
     @GetMapping
-    public ResponseEntity<Page<StudyResponse>> getAllStudies(Pageable pageable) {
-        Page<StudyResponse> studies = studyService.getAllStudies(pageable);
+    public ResponseEntity<Page<StudyResponse>> getAllStudies(
+            Pageable pageable,
+            @RequestParam(required = false) String patientName,
+            @RequestParam(required = false) String doctorName,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        Page<StudyResponse> studies = studyService.getAllStudies(pageable, patientName, doctorName, date);
         return new ResponseEntity<>(studies, HttpStatus.OK);
     }
 

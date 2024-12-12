@@ -65,31 +65,25 @@ export const amogus = <Item>(
   const fetchWithQuery = async (
     update: boolean,
     pageSize: number,
-    pageIndex: number
-    // sortKeys: SortKey[],
-    // filterValue: string
+    pageIndex: number,
+    extra: Record<string, string>
   ) => {
     if (pageIndex < 0) throw new Error('invalid page index');
     const q = new URLSearchParams();
     q.set('size', String(pageSize));
     q.set('page', String(pageIndex));
+    Object.entries(extra).forEach(([key, val]) => {
+      if (val) {
+        q.set(key, val);
+      }
+    });
+    // q.set
     const data = await fetchFn(q);
     return data;
   };
 
-  const fetchData = async (
-    pageSize: number,
-    pageIndex: number
-    // sortKeys: SortKey[],
-    // filterValue: string
-  ) => {
-    const { content, last, first } = await fetchWithQuery(
-      true,
-      pageSize,
-      pageIndex
-      // sortKeys,
-      // filterValue
-    );
+  const fetchData = async (pageSize: number, pageIndex: number, extra: Record<string, string>) => {
+    const { content, last, first } = await fetchWithQuery(true, pageSize, pageIndex, extra);
     data.set(content);
     hasNextPage.set(!last);
     hasPreviousPage.set(!first);

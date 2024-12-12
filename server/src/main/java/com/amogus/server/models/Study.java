@@ -102,7 +102,7 @@ public class Study {
         response.setId(id);
         response.setPatient(patient);
         response.setUser(user.toResponse());
-        response.setDevice(device);
+        response.setDevice(device.toResponse());
         response.setStatus(status);
         response.setNotes(notes);
         response.setDicomid(dicomid);

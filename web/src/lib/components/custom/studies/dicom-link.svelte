@@ -39,7 +39,7 @@
 
 <div class="gap-10px flex items-center justify-items-center">
   {#if dicomid}
-    <Button variant="link" href="/preivew?id={id}" target="_blank">{$t('open')}</Button>
+    <Button variant="link" href="/preview?id={id}" target="_blank">{$t('open')}</Button>
   {:else}
     <Dialog.Root>
       <Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>{$t('upload')}</Dialog.Trigger>

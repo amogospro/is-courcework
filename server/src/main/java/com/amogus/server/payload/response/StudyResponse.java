@@ -8,7 +8,7 @@ public class StudyResponse {
     private Integer id;
     private Patient patient;
     private UserResponse user;
-    private Device device;
+    private DeviceResponse device;
     private String status;
     private String notes;
 
@@ -38,12 +38,12 @@ public class StudyResponse {
         this.user = user;
     }
 
-    public Device getDevice() {
+    public DeviceResponse getDevice() {
         return device;
     }
 
-    public void setDevice(Device deviceid) {
-        this.device = deviceid;
+    public void setDevice(DeviceResponse device) {
+        this.device = device;
     }
 
     public String getStatus() {

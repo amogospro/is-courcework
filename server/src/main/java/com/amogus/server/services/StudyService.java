@@ -11,7 +11,10 @@ import com.amogus.server.repositories.UserProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class StudyService {
@@ -25,8 +28,13 @@ public class StudyService {
     @Autowired
     private DeviceRepository deviceRepository;
 
-    public Page<StudyResponse> getAllStudies(Pageable pageable) {
-        return studyRepository.findAll(pageable).map(Study::toResponse);
+    public Page<StudyResponse> getAllStudies(Pageable pageable, String patientName, String doctorName, LocalDate date) {
+        Specification<Study> spec = Specification.where(StudySpecifications.hasPatientName(patientName))
+                .and(StudySpecifications.hasDoctorName(doctorName))
+                .and(StudySpecifications.hasDate(date));
+
+        Page<Study> studies = studyRepository.findAll(spec, pageable);
+        return studies.map(Study::toResponse);
     }
 
     public Study getStudyById(Integer id) {
