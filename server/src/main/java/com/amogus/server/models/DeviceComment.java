@@ -1,5 +1,8 @@
 package com.amogus.server.models;
 
+import com.amogus.server.payload.response.DeviceCommentResponse;
+import com.amogus.server.payload.response.DeviceResponse;
+import com.amogus.server.payload.response.StudyResponse;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -19,7 +22,7 @@ public class DeviceComment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "deviceid", nullable = false)
-    private Device deviceid;
+    private Device device;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -41,12 +44,12 @@ public class DeviceComment {
         this.id = id;
     }
 
-    public Device getDeviceid() {
-        return deviceid;
+    public Device getDevice() {
+        return device;
     }
 
-    public void setDeviceid(Device deviceid) {
-        this.deviceid = deviceid;
+    public void setDevice(Device deviceid) {
+        this.device = deviceid;
     }
 
     public Userprofile getUserid() {
@@ -73,4 +76,12 @@ public class DeviceComment {
         this.timestamp = timestamp;
     }
 
+    public DeviceCommentResponse toResponse() {
+        DeviceCommentResponse response = new DeviceCommentResponse();
+        response.setId(id);
+        response.setUser(userid.toResponse());
+        response.setCommenttext(commenttext);
+        response.setTimestamp(timestamp);
+        return response;
+    }
 }

@@ -1,6 +1,12 @@
 package com.amogus.server.models;
 
+import com.amogus.server.payload.response.DeviceCommentResponse;
+import com.amogus.server.payload.response.DeviceResponse;
 import jakarta.persistence.*;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -20,6 +26,10 @@ public class Device {
 
     @Column(name = "status", nullable = false, columnDefinition = "devicestatusenum not null")
     private String status;
+
+
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<DeviceComment> comments;
 
     public Integer getId() {
         return id;
@@ -51,5 +61,24 @@ public class Device {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Set<DeviceComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<DeviceComment> comments) {
+        this.comments = comments;
+    }
+
+    public DeviceResponse toResponse() {
+        DeviceResponse response = new DeviceResponse();
+        response.setId(id);
+        response.setDevicesn(devicesn);
+        response.setStatus(status);
+        response.setComments(comments.stream().map(DeviceComment::toResponse).collect(Collectors.toList()));
+        response.setLocation(location);
+
+        return response;
     }
 }

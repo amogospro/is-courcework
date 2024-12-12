@@ -1,10 +1,15 @@
 package com.amogus.server.controllers;
 
+import com.amogus.server.models.Device;
 import com.amogus.server.models.DeviceComment;
+import com.amogus.server.models.Userprofile;
+import com.amogus.server.security.CustomUserDetails;
 import com.amogus.server.services.DeviceCommentService;
+import com.amogus.server.services.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,16 +20,24 @@ import java.util.Optional;
 public class DeviceCommentController {
 
     private final DeviceCommentService deviceCommentService;
+    private final DeviceService deviceService;
 
     @Autowired
-    public DeviceCommentController(DeviceCommentService deviceCommentService) {
+    public DeviceCommentController(DeviceCommentService deviceCommentService, DeviceService deviceService) {
         this.deviceCommentService = deviceCommentService;
+        this.deviceService = deviceService;
     }
 
     // Create a new comment
     @PostMapping
-    public ResponseEntity<DeviceComment> createComment(@RequestBody DeviceComment deviceComment) {
-        DeviceComment savedComment = deviceCommentService.createComment(deviceComment);
+    public ResponseEntity<DeviceComment> createComment(
+            @RequestParam() Integer deviceid,
+            @RequestBody String deviceComment,
+            Authentication authentication
+    ) {
+        Userprofile user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
+        Device device = deviceService.getDeviceById(deviceid);
+        DeviceComment savedComment = deviceCommentService.createComment(device, user, deviceComment);
         return new ResponseEntity<>(savedComment, HttpStatus.CREATED);
     }
 

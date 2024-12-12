@@ -2,6 +2,7 @@ package com.amogus.server.controllers;
 
 import com.amogus.server.models.Device;
 import com.amogus.server.models.Device;
+import com.amogus.server.payload.response.DeviceResponse;
 import com.amogus.server.services.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,33 +27,33 @@ public class DeviceController {
 
     // Create or update a device
     @PostMapping
-    public ResponseEntity<Device> createDevice(@RequestBody Device device) {
-        Device savedDevice = deviceService.createDevice(device);
+    public ResponseEntity<DeviceResponse> createDevice(@RequestBody Device device) {
+        DeviceResponse savedDevice = deviceService.createDevice(device);
         return new ResponseEntity<>(savedDevice, HttpStatus.CREATED);
     }
 
     // Get all devices
     @GetMapping
-    public ResponseEntity<Page<Device>> getAllDevices(Pageable pageable) {
-        Page<Device> devices = deviceService.getAllDevices(pageable);
+    public ResponseEntity<Page<DeviceResponse>> getAllDevices(Pageable pageable) {
+        Page<DeviceResponse> devices = deviceService.getAllDevices(pageable);
         return new ResponseEntity<>(devices, HttpStatus.OK);
     }
 
     // Get a device by its ID
     @GetMapping("/{id}")
-    public ResponseEntity<Device> getDeviceById(@PathVariable Integer id) {
-        Device device = deviceService.getDeviceById(id);
+    public ResponseEntity<DeviceResponse> getDeviceById(@PathVariable Integer id) {
+        DeviceResponse device = deviceService.getDeviceById(id).toResponse();
         return new ResponseEntity<>(device, HttpStatus.OK);
     }
 
 
     // Update a device by its ID
     @PutMapping("/{id}")
-    public ResponseEntity<Device> updateDevice(@PathVariable Integer id, @RequestBody Device device) {
+    public ResponseEntity<DeviceResponse> updateDevice(@PathVariable Integer id, @RequestBody Device device) {
         Device existingDevice = deviceService.getDeviceById(id);
         if (existingDevice != null) {
             device.setId(id);  // Ensure the ID is set for updating
-            Device updatedDevice = deviceService.updateDevice(device);
+            DeviceResponse updatedDevice = deviceService.updateDevice(device);
             return new ResponseEntity<>(updatedDevice, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

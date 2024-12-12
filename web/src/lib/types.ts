@@ -41,6 +41,13 @@ export type UserWithRoles = User & {
 };
 
 // device
+export const DeviceCommentSchema = z.object({
+  id: z.number().int().nonnegative().optional(),
+  commenttext: z.string().min(1),
+  timestamp: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date' })
+});
+export type DeviceComment = z.infer<typeof DeviceCommentSchema>;
+
 export const DeviceStatus = z.enum(['Работает', 'Неисправно', 'В обслуживании']);
 export const DeviceSchema = z.object({
   id: z.number().int().nonnegative().optional(),
@@ -49,8 +56,10 @@ export const DeviceSchema = z.object({
   status: DeviceStatus
 });
 export type Device = z.infer<typeof DeviceSchema>;
+export type DeviceWithComments = Device & { comments: (DeviceComment & { user: User })[] };
 export const getDeviceStuff = (p: Device | undefined) =>
   p ? `${p.devicesn} at ${p.location}` : '';
+
 // study
 export const StudyStatus = z.enum(['Planned', 'Canceled', 'Successed']);
 export const StudySchema = z.object({

@@ -1,10 +1,13 @@
 package com.amogus.server.services;
 
+import com.amogus.server.models.Device;
 import com.amogus.server.models.DeviceComment;
+import com.amogus.server.models.Userprofile;
 import com.amogus.server.repositories.DeviceCommentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +22,14 @@ public class DeviceCommentService {
     }
 
     // Create a new comment
-    public DeviceComment createComment(DeviceComment deviceComment) {
+    public DeviceComment createComment(Device device, Userprofile user, String comment) {
+        DeviceComment deviceComment = new DeviceComment();
+
+        deviceComment.setDevice(device);
+        deviceComment.setCommenttext(comment);
+        deviceComment.setUserid(user);
+        deviceComment.setTimestamp(Instant.now());
+
         return deviceCommentRepository.save(deviceComment);
     }
 

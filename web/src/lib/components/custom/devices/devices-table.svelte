@@ -4,7 +4,7 @@
   import { writable } from 'svelte/store';
   import DataTableActions from '$lib/components/custom/table/data-table-actions.svelte';
   import { Button } from '$lib/components/ui/button';
-  import type { Device } from '$lib/types';
+  import type { Device, DeviceWithComments } from '$lib/types';
   import _ from 'lodash';
   import { toast } from 'svelte-sonner';
   import { createDevice, deleteDevice, getDevices, updateDevice } from '$lib/api';
@@ -13,8 +13,9 @@
   import Table from '$lib/components/custom/table/data-table.svelte';
   import IdActions from '../table/id-actions.svelte';
   import { _ as t } from 'svelte-i18n';
+  import Comments from './comments.svelte';
 
-  export let Devices = writable<Device[]>([]);
+  export let Devices = writable<DeviceWithComments[]>([]);
   export let readonly = false;
   export let selected: Device | null = null;
   export let id_selector = false;
@@ -22,7 +23,7 @@
   const fetchFn = getDevices;
   let refetch: () => any;
 
-  const colsFn: ColsFn<Device> = (table) => [
+  const colsFn: ColsFn<DeviceWithComments> = (table) => [
     ...(id_selector
       ? [
           table.column({
@@ -53,6 +54,19 @@
     table.column({
       accessor: 'status',
       header: $t('status')
+    }),
+    table.column({
+      accessor: (item) => item,
+      id: 'comments',
+      header: $t('comments'),
+      cell: (item) => {
+        const id = item.value.id;
+        if (!id) throw new Error('no id');
+        return createRender(Comments, {
+          data: item.value,
+          refetch
+        });
+      }
     }),
     ...(!readonly
       ? [

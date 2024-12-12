@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'svelte-sonner';
 import { writable } from 'svelte/store';
-import type { Device, Patient, Study, Schedule, User, Person, UserWithRoles } from './types';
+import type { Device, Patient, Study, Schedule, User, Person, UserWithRoles, DeviceWithComments } from './types';
 // import type { Organization, Person, Product, ProductEdit } from './types';
 // import ReconnectingWebSocket from 'reconnecting-websocket';
 // import { Subject } from 'rxjs';
@@ -263,7 +263,7 @@ export const deleteDevice = async (id: number) => {
 };
 
 export const getDevices = async (q = new URLSearchParams()) => {
-  const { data } = await api.get<Response<Device[]>>(`/devices?${q}`);
+  const { data } = await api.get<Response<DeviceWithComments[]>>(`/devices?${q}`);
   console.log(data);
   return data;
 };
