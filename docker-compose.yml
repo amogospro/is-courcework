@@ -18,9 +18,9 @@ services:
     ports:
       - 8042:8042
       - 4242:4242
-#    volumes: # don't forget to specify read-only for .json
-#      - ./orthanc.json:/etc/orthanc/orthanc.json:ro
-#      - ./orthanc_db:/var/lib/orthanc/db/
+    #    volumes: # don't forget to specify read-only for .json
+    #      - ./orthanc.json:/etc/orthanc/orthanc.json:ro
+    #      - ./orthanc_db:/var/lib/orthanc/db/
     restart: always
     deploy:
       resources:
@@ -56,6 +56,8 @@ services:
     ports:
       - '4173:4173'
     restart: unless-stopped
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=8192
 volumes:
   postgres_data:
 

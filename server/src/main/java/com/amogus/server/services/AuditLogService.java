@@ -24,37 +24,43 @@ public class AuditLogService {
     private UserService userService;
 
     public void createAuditLog(Object entity, String actionType) {
-        AuditLog auditLog = new AuditLog();
-
-        auditLog.setEntity("Unknown");
-        auditLog.setEntityid(-1);
         try {
-            Integer entityId = (Integer) entity.getClass().getMethod("getId").invoke(entity);
-            String name = entity.getClass().getSimpleName();
-            auditLog.setEntity(name);
-            if (name.equals("AuditLog")) {
-                return;
+
+            AuditLog auditLog = new AuditLog();
+
+            auditLog.setEntity("Unknown");
+            auditLog.setEntityid(-1);
+            try {
+                Integer entityId = (Integer) entity.getClass().getMethod("getId").invoke(entity);
+                String name = entity.getClass().getSimpleName();
+                auditLog.setEntity(name);
+                if (name.equals("AuditLog")) {
+                    return;
+                }
+                auditLog.setEntityid(entityId);
+            } catch (Exception e) {
+                // Handle exception or set default values
             }
-            auditLog.setEntityid(entityId);
+
+            // Get current user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()) {
+                Userprofile user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
+                auditLog.setUserid(user);
+            } else {
+                // Handle anonymous or system actions
+                auditLog.setUserid(null);
+            }
+
+            auditLog.setActionType(actionType);
+            auditLog.setTimestamp(Instant.now());
+            auditLog.setDetails("");
+
+            auditLogRepository.save(auditLog);
         } catch (Exception e) {
             // Handle exception or set default values
         }
 
-        // Get current user
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            Userprofile user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
-            auditLog.setUserid(user);
-        } else {
-            // Handle anonymous or system actions
-            auditLog.setUserid(null);
-        }
-
-        auditLog.setActionType(actionType);
-        auditLog.setTimestamp(Instant.now());
-        auditLog.setDetails("");
-
-        auditLogRepository.save(auditLog);
     }
 
     public Page<AuditLogResponse> getAuditLogs(Pageable pageable) {
