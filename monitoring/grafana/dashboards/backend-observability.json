@@ -1,0 +1,193 @@
+{
+  "id": null,
+  "uid": "backend-observability",
+  "title": "Backend Observability",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "type": "row",
+      "title": "HTTP",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 1 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "title": "Request Duration p95",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{job=\"spring-boot\"}[5m])) by (le))",
+          "legendFormat": "p95 latency"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 1, "w": 12, "h": 8 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Request Rate",
+      "targets": [
+        {
+          "expr": "sum(rate(http_server_requests_seconds_count{job=\"spring-boot\"}[1m]))",
+          "legendFormat": "req/s"
+        }
+      ],
+      "gridPos": { "x": 12, "y": 1, "w": 12, "h": 8 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Error Rate (5xx)",
+      "targets": [
+        {
+          "expr": "sum(rate(http_server_requests_seconds_count{job=\"spring-boot\",status=~\"5..\"}[5m]))",
+          "legendFormat": "errors/s"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 9, "w": 12, "h": 8 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Response Duration Histogram (p50/p90/p99)",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.5, sum(rate(http_server_requests_seconds_bucket{job=\"spring-boot\"}[5m])) by (le))",
+          "legendFormat": "p50"
+        },
+        {
+          "expr": "histogram_quantile(0.9, sum(rate(http_server_requests_seconds_bucket{job=\"spring-boot\"}[5m])) by (le))",
+          "legendFormat": "p90"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(http_server_requests_seconds_bucket{job=\"spring-boot\"}[5m])) by (le))",
+          "legendFormat": "p99"
+        }
+      ],
+      "gridPos": { "x": 12, "y": 9, "w": 12, "h": 8 }
+    },
+    {
+      "type": "row",
+      "title": "Database",
+      "gridPos": { "x": 0, "y": 17, "w": 24, "h": 1 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "title": "DB Query Duration p95",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(jdbc_query_seconds_bucket{job=\"spring-boot\"}[5m])) by (le))",
+          "legendFormat": "p95 query"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 18, "w": 12, "h": 8 }
+    },
+    {
+      "type": "timeseries",
+      "title": "DB Query Throughput",
+      "targets": [
+        {
+          "expr": "sum(rate(jdbc_query_seconds_count{job=\"spring-boot\"}[1m]))",
+          "legendFormat": "queries/s"
+        }
+      ],
+      "gridPos": { "x": 12, "y": 18, "w": 12, "h": 8 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Hikari Connections",
+      "targets": [
+        {
+          "expr": "avg(hikaricp_connections{job=\"spring-boot\"})",
+          "legendFormat": "active"
+        },
+        {
+          "expr": "avg(hikaricp_connections_active{job=\"spring-boot\"})",
+          "legendFormat": "active (current)"
+        },
+        {
+          "expr": "avg(hikaricp_connections_idle{job=\"spring-boot\"})",
+          "legendFormat": "idle"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 26, "w": 12, "h": 8 }
+    },
+    {
+      "type": "timeseries",
+      "title": "DB Connection Wait Time",
+      "targets": [
+        {
+          "expr": "rate(hikaricp_connections_pending{job=\"spring-boot\"}[5m])",
+          "legendFormat": "pending rate"
+        }
+      ],
+      "gridPos": { "x": 12, "y": 26, "w": 12, "h": 8 }
+    },
+    {
+      "type": "row",
+      "title": "System",
+      "gridPos": { "x": 0, "y": 34, "w": 24, "h": 1 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "title": "CPU Usage",
+      "targets": [
+        {
+          "expr": "system_cpu_usage{job=\"spring-boot\"}",
+          "legendFormat": "system"
+        },
+        {
+          "expr": "process_cpu_usage{job=\"spring-boot\"}",
+          "legendFormat": "process"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 35, "w": 12, "h": 8 }
+    },
+    {
+      "type": "timeseries",
+      "title": "JVM Heap Memory",
+      "targets": [
+        {
+          "expr": "jvm_memory_used_bytes{job=\"spring-boot\",area=\"heap\"}",
+          "legendFormat": "used"
+        },
+        {
+          "expr": "jvm_memory_max_bytes{job=\"spring-boot\",area=\"heap\"}",
+          "legendFormat": "max"
+        }
+      ],
+      "gridPos": { "x": 12, "y": 35, "w": 12, "h": 8 }
+    },
+    {
+      "type": "stat",
+      "title": "Uptime",
+      "targets": [
+        {
+          "expr": "process_uptime_seconds{job=\"spring-boot\"}"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 43, "w": 6, "h": 4 }
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "job",
+        "type": "query",
+        "datasource": "Prometheus",
+        "query": "label_values(up, job)",
+        "refresh": 1,
+        "current": { "text": "spring-boot", "value": "spring-boot" },
+        "includeAll": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  }
+}

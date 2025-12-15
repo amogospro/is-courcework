@@ -49,6 +49,35 @@ services:
         limits:
           cpus: '0.50'
           memory: 256M
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - '9090:9090'
+    networks:
+      - amogusnet
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.1.4
+    depends_on:
+      - prometheus
+    ports:
+      - '3001:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    networks:
+      - amogusnet
+    restart: unless-stopped
   web:
     build:
       context: ./web
@@ -60,6 +89,7 @@ services:
       - NODE_OPTIONS=--max-old-space-size=8192
 volumes:
   postgres_data:
+  grafana_data:
 
 networks:
   amogusnet:
