@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   postgres:
-    image: 'postgres:latest'
+    image: 'postgres:16'
     environment:
       - POSTGRES_USER=s368100
       - POSTGRES_PASSWORD=peUGVgjH0345TYXh # Use the password specified in your properties file
