@@ -1,0 +1,348 @@
+databaseChangeLog:
+  - changeSet:
+      id: 020-create-dependent-tables
+      author: wgmlgz
+      changes:
+        - createTable:
+            tableName: patient
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_patient
+              - column:
+                  name: person_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uq_patient_person
+              - column:
+                  name: insurance_policy_number
+                  type: varchar(50)
+        - createTable:
+            tableName: device
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_device
+              - column:
+                  name: device_sn
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uq_device_device_sn
+              - column:
+                  name: location
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: device_status_enum
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: study
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_study
+              - column:
+                  name: patient_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: device_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  defaultValue: Planned
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dicom_id
+                  type: varchar(255)
+              - column:
+                  name: notes
+                  type: varchar(1000)
+        - createTable:
+            tableName: device_comment
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_device_comment
+              - column:
+                  name: device_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment_text
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: schedule
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_schedule
+              - column:
+                  name: start_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: study_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: scheduled_by_user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comments
+                  type: varchar(1000)
+        - createTable:
+            tableName: audit_log
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_audit_log
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: action_type
+                  type: action_type_enum
+                  constraints:
+                    nullable: false
+              - column:
+                  name: entity
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: entity_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: details
+                  type: varchar(2000)
+        - createTable:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: user_role
+            columnNames: user_id, role_id
+            constraintName: pk_user_role
+        - addForeignKeyConstraint:
+            baseTableName: patient
+            baseColumnNames: person_id
+            constraintName: fk_patient_person
+            referencedTableName: person
+            referencedColumnNames: id
+            onDelete: restrict
+        - addForeignKeyConstraint:
+            baseTableName: study
+            baseColumnNames: patient_id
+            constraintName: fk_study_patient
+            referencedTableName: patient
+            referencedColumnNames: id
+            onDelete: restrict
+        - addForeignKeyConstraint:
+            baseTableName: study
+            baseColumnNames: user_id
+            constraintName: fk_study_user_profile
+            referencedTableName: user_profile
+            referencedColumnNames: id
+            onDelete: restrict
+        - addForeignKeyConstraint:
+            baseTableName: study
+            baseColumnNames: device_id
+            constraintName: fk_study_device
+            referencedTableName: device
+            referencedColumnNames: id
+            onDelete: restrict
+        - addForeignKeyConstraint:
+            baseTableName: device_comment
+            baseColumnNames: device_id
+            constraintName: fk_device_comment_device
+            referencedTableName: device
+            referencedColumnNames: id
+            onDelete: restrict
+        - addForeignKeyConstraint:
+            baseTableName: device_comment
+            baseColumnNames: user_id
+            constraintName: fk_device_comment_user
+            referencedTableName: user_profile
+            referencedColumnNames: id
+            onDelete: restrict
+        - addForeignKeyConstraint:
+            baseTableName: schedule
+            baseColumnNames: study_id
+            constraintName: fk_schedule_study
+            referencedTableName: study
+            referencedColumnNames: id
+            onDelete: restrict
+        - addForeignKeyConstraint:
+            baseTableName: schedule
+            baseColumnNames: scheduled_by_user_id
+            constraintName: fk_schedule_user
+            referencedTableName: user_profile
+            referencedColumnNames: id
+            onDelete: restrict
+        - addForeignKeyConstraint:
+            baseTableName: audit_log
+            baseColumnNames: user_id
+            constraintName: fk_audit_log_user
+            referencedTableName: user_profile
+            referencedColumnNames: id
+            onDelete: restrict
+        - addForeignKeyConstraint:
+            baseTableName: user_role
+            baseColumnNames: user_id
+            constraintName: fk_user_role_user
+            referencedTableName: user_profile
+            referencedColumnNames: id
+            onDelete: restrict
+        - addForeignKeyConstraint:
+            baseTableName: user_role
+            baseColumnNames: role_id
+            constraintName: fk_user_role_role
+            referencedTableName: role
+            referencedColumnNames: id
+            onDelete: restrict
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableName: user_role
+            constraintName: fk_user_role_role
+        - dropForeignKeyConstraint:
+            baseTableName: user_role
+            constraintName: fk_user_role_user
+        - dropForeignKeyConstraint:
+            baseTableName: audit_log
+            constraintName: fk_audit_log_user
+        - dropForeignKeyConstraint:
+            baseTableName: schedule
+            constraintName: fk_schedule_user
+        - dropForeignKeyConstraint:
+            baseTableName: schedule
+            constraintName: fk_schedule_study
+        - dropForeignKeyConstraint:
+            baseTableName: device_comment
+            constraintName: fk_device_comment_user
+        - dropForeignKeyConstraint:
+            baseTableName: device_comment
+            constraintName: fk_device_comment_device
+        - dropForeignKeyConstraint:
+            baseTableName: study
+            constraintName: fk_study_device
+        - dropForeignKeyConstraint:
+            baseTableName: study
+            constraintName: fk_study_user_profile
+        - dropForeignKeyConstraint:
+            baseTableName: study
+            constraintName: fk_study_patient
+        - dropForeignKeyConstraint:
+            baseTableName: patient
+            constraintName: fk_patient_person
+        - dropTable:
+            tableName: user_role
+        - dropTable:
+            tableName: audit_log
+        - dropTable:
+            tableName: schedule
+        - dropTable:
+            tableName: device_comment
+        - dropTable:
+            tableName: study
+        - dropTable:
+            tableName: device
+        - dropTable:
+            tableName: patient
+  - changeSet:
+      id: 020-add-check-schedule-status
+      author: wgmlgz
+      changes:
+        - sql:
+            sql: >
+              ALTER TABLE study
+              ADD CONSTRAINT chk_schedule_status
+              CHECK (status IN ('Planned', 'Canceled', 'Succeeded'));
+      rollback:
+        - sql:
+            sql: >
+              ALTER TABLE study
+              DROP CONSTRAINT chk_schedule_status;

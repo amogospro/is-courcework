@@ -1,0 +1,88 @@
+databaseChangeLog:
+  - changeSet:
+      id: 030-index-person-email
+      author: wgmlgz
+      changes:
+        - createIndex:
+            tableName: person
+            indexName: idx_person_email
+            unique: true
+            columns:
+              - column:
+                  name: email
+      rollback:
+        - dropIndex:
+            tableName: person
+            indexName: idx_person_email
+  - changeSet:
+      id: 031-index-user-profile-username
+      author: wgmlgz
+      changes:
+        - createIndex:
+            tableName: user_profile
+            indexName: idx_user_profile_username
+            unique: true
+            columns:
+              - column:
+                  name: username
+      rollback:
+        - dropIndex:
+            tableName: user_profile
+            indexName: idx_user_profile_username
+  - changeSet:
+      id: 032-index-device-sn
+      author: wgmlgz
+      changes:
+        - createIndex:
+            tableName: device
+            indexName: idx_device_device_sn
+            unique: true
+            columns:
+              - column:
+                  name: device_sn
+      rollback:
+        - dropIndex:
+            tableName: device
+            indexName: idx_device_device_sn
+  - changeSet:
+      id: 033-index-study-patient
+      author: wgmlgz
+      changes:
+        - createIndex:
+            tableName: study
+            indexName: idx_study_patient_id
+            columns:
+              - column:
+                  name: patient_id
+      rollback:
+        - dropIndex:
+            tableName: study
+            indexName: idx_study_patient_id
+  - changeSet:
+      id: 034-index-study-status
+      author: wgmlgz
+      changes:
+        - createIndex:
+            tableName: study
+            indexName: idx_study_status
+            columns:
+              - column:
+                  name: status
+      rollback:
+        - dropIndex:
+            tableName: study
+            indexName: idx_study_status
+  - changeSet:
+      id: 035-index-audit-log-user
+      author: wgmlgz
+      changes:
+        - createIndex:
+            tableName: audit_log
+            indexName: idx_audit_log_user_id
+            columns:
+              - column:
+                  name: user_id
+      rollback:
+        - dropIndex:
+            tableName: audit_log
+            indexName: idx_audit_log_user_id
