@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 040-function-get-study-data
+      author: wgmlgz
+      changes:
+        - sqlFile:
+            path: ../functions/get_study_data.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+      rollback: |
+        DROP FUNCTION IF EXISTS get_study_data(bigint);
+  - changeSet:
+      id: 041-function-update-device-status
+      author: wgmlgz
+      changes:
+        - sqlFile:
+            path: ../functions/update_device_status.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+      rollback: |
+        DROP FUNCTION IF EXISTS update_device_status(bigint, device_status_enum, bigint, varchar);
