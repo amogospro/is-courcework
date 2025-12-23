@@ -1,0 +1,139 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-person
+      author: Egoroshka999
+      changes:
+        - createTable:
+            tableName: person
+            columns:
+              - column:
+                  name: id
+                  type: SERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: firstname
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lastname
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: middlename
+                  type: VARCHAR
+              - column:
+                  name: dateofbirth
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: gender
+                  type: GenderEnum
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phonenumber
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: email
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: address
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: person
+            cascadeConstraints: true
+
+  - changeSet:
+      id: 003-create-user-profile
+      author: Egoroshka999
+      changes:
+        - createTable:
+            tableName: userprofile
+            columns:
+              - column:
+                  name: id
+                  type: SERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: personid
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: username
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: passwordhash
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dateregistered
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: userprofile
+            baseColumnNames: personid
+            referencedTableName: person
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_userprofile_personid
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableName: userprofile
+            constraintName: fk_userprofile_personid
+        - dropTable:
+            tableName: userprofile
+            cascadeConstraints: true
+
+  - changeSet:
+      id: 004-create-role
+      author: Egoroshka999
+      changes:
+        - createTable:
+            tableName: role
+            columns:
+              - column:
+                  name: id
+                  type: SERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: rolename
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: description
+                  type: TEXT
+      rollback:
+        - dropTable:
+            tableName: role
+            cascadeConstraints: true

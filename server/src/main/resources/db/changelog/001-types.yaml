@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-types
+      author: Egoroshka999
+      changes:
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: |
+              CREATE TYPE GenderEnum AS ENUM ('M', 'F', 'O');
+              CREATE CAST (CHARACTER VARYING as GenderEnum) WITH INOUT AS IMPLICIT;
+
+              CREATE TYPE DeviceStatusEnum AS ENUM ('Работает', 'Неисправно', 'В обслуживании');
+              CREATE CAST (CHARACTER VARYING as DeviceStatusEnum) WITH INOUT AS IMPLICIT;
+
+              CREATE TYPE ActionTypeEnum AS ENUM ('Создание', 'Изменение', 'Удаление', 'Вход', 'Выход');
+              CREATE CAST (CHARACTER VARYING as ActionTypeEnum) WITH INOUT AS IMPLICIT;
+      rollback:
+        - sql: |
+            DROP CAST IF EXISTS (CHARACTER VARYING as ActionTypeEnum);
+            DROP CAST IF EXISTS (CHARACTER VARYING as DeviceStatusEnum);
+            DROP CAST IF EXISTS (CHARACTER VARYING as GenderEnum);
+            DROP TYPE IF EXISTS ActionTypeEnum;
+            DROP TYPE IF EXISTS DeviceStatusEnum;
+            DROP TYPE IF EXISTS GenderEnum;
