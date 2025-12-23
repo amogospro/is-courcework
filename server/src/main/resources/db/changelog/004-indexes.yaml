@@ -1,0 +1,90 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-index-person-email
+      author: codex
+      changes:
+        - createIndex:
+            indexName: idx_person_email
+            tableName: Person
+            columns:
+              - column:
+                  name: Email
+      rollback:
+        - dropIndex:
+            indexName: idx_person_email
+            tableName: Person
+
+  - changeSet:
+      id: 013-index-user-profile-username
+      author: codex
+      changes:
+        - createIndex:
+            indexName: idx_user_profile_username
+            tableName: UserProfile
+            columns:
+              - column:
+                  name: Username
+      rollback:
+        - dropIndex:
+            indexName: idx_user_profile_username
+            tableName: UserProfile
+
+  - changeSet:
+      id: 014-index-device-sn
+      author: codex
+      changes:
+        - createIndex:
+            indexName: idx_device_device_sn
+            tableName: Device
+            columns:
+              - column:
+                  name: DeviceSN
+      rollback:
+        - dropIndex:
+            indexName: idx_device_device_sn
+            tableName: Device
+
+  - changeSet:
+      id: 015-index-study-patient
+      author: codex
+      changes:
+        - createIndex:
+            indexName: idx_study_patient_id
+            tableName: Study
+            columns:
+              - column:
+                  name: PatientID
+      rollback:
+        - dropIndex:
+            indexName: idx_study_patient_id
+            tableName: Study
+
+  - changeSet:
+      id: 016-index-study-status
+      author: codex
+      changes:
+        - createIndex:
+            indexName: idx_study_status
+            tableName: Study
+            columns:
+              - column:
+                  name: Status
+      rollback:
+        - dropIndex:
+            indexName: idx_study_status
+            tableName: Study
+
+  - changeSet:
+      id: 017-index-audit-log-user
+      author: codex
+      changes:
+        - createIndex:
+            indexName: idx_audit_log_user_id
+            tableName: AuditLog
+            columns:
+              - column:
+                  name: UserID
+      rollback:
+        - dropIndex:
+            indexName: idx_audit_log_user_id
+            tableName: AuditLog

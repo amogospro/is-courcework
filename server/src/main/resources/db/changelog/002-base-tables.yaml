@@ -1,0 +1,132 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-person
+      author: codex
+      changes:
+        - createTable:
+            tableName: Person
+            columns:
+              - column:
+                  name: ID
+                  type: SERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: FirstName
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: LastName
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: MiddleName
+                  type: VARCHAR
+              - column:
+                  name: DateOfBirth
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: Gender
+                  type: GenderEnum
+                  constraints:
+                    nullable: false
+              - column:
+                  name: PhoneNumber
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: Email
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: Address
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: Person
+            cascadeConstraints: true
+
+  - changeSet:
+      id: 003-create-user-profile
+      author: codex
+      changes:
+        - createTable:
+            tableName: UserProfile
+            columns:
+              - column:
+                  name: ID
+                  type: SERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: PersonID
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                    unique: true
+                    referencedTableName: Person
+                    referencedColumnNames: ID
+                    deleteCascade: true
+              - column:
+                  name: Username
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: PasswordHash
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: DateRegistered
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: UserProfile
+            cascadeConstraints: true
+
+  - changeSet:
+      id: 004-create-role
+      author: codex
+      changes:
+        - createTable:
+            tableName: Role
+            columns:
+              - column:
+                  name: ID
+                  type: SERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: RoleName
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: Description
+                  type: TEXT
+      rollback:
+        - dropTable:
+            tableName: Role
+            cascadeConstraints: true
