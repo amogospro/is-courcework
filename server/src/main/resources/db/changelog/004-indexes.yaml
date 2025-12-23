@@ -1,90 +1,90 @@
 databaseChangeLog:
   - changeSet:
       id: 012-index-person-email
-      author: codex
+      author: Egoroshka999
       changes:
         - createIndex:
             indexName: idx_person_email
-            tableName: Person
+            tableName: person
             columns:
               - column:
-                  name: Email
+                  name: email
       rollback:
         - dropIndex:
             indexName: idx_person_email
-            tableName: Person
+            tableName: person
 
   - changeSet:
       id: 013-index-user-profile-username
-      author: codex
+      author: Egoroshka999
       changes:
         - createIndex:
             indexName: idx_user_profile_username
-            tableName: UserProfile
+            tableName: userprofile
             columns:
               - column:
-                  name: Username
+                  name: username
       rollback:
         - dropIndex:
             indexName: idx_user_profile_username
-            tableName: UserProfile
+            tableName: userprofile
 
   - changeSet:
       id: 014-index-device-sn
-      author: codex
+      author: Egoroshka999
       changes:
         - createIndex:
             indexName: idx_device_device_sn
-            tableName: Device
+            tableName: device
             columns:
               - column:
-                  name: DeviceSN
+                  name: devicesn
       rollback:
         - dropIndex:
             indexName: idx_device_device_sn
-            tableName: Device
+            tableName: device
 
   - changeSet:
       id: 015-index-study-patient
-      author: codex
+      author: Egoroshka999
       changes:
         - createIndex:
             indexName: idx_study_patient_id
-            tableName: Study
+            tableName: study
             columns:
               - column:
-                  name: PatientID
+                  name: patientid
       rollback:
         - dropIndex:
             indexName: idx_study_patient_id
-            tableName: Study
+            tableName: study
 
   - changeSet:
       id: 016-index-study-status
-      author: codex
+      author: Egoroshka999
       changes:
         - createIndex:
             indexName: idx_study_status
-            tableName: Study
+            tableName: study
             columns:
               - column:
-                  name: Status
+                  name: status
       rollback:
         - dropIndex:
             indexName: idx_study_status
-            tableName: Study
+            tableName: study
 
   - changeSet:
       id: 017-index-audit-log-user
-      author: codex
+      author: Egoroshka999
       changes:
         - createIndex:
             indexName: idx_audit_log_user_id
-            tableName: AuditLog
+            tableName: auditlog
             columns:
               - column:
-                  name: UserID
+                  name: userid
       rollback:
         - dropIndex:
             indexName: idx_audit_log_user_id
-            tableName: AuditLog
+            tableName: auditlog

@@ -1,289 +1,284 @@
 databaseChangeLog:
   - changeSet:
       id: 005-create-patient
-      author: codex
+      author: Egoroshka999
       changes:
         - createTable:
-            tableName: Patient
+            tableName: patient
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: SERIAL
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: PersonID
+                  name: personid
                   type: INTEGER
                   constraints:
                     nullable: false
                     unique: true
               - column:
-                  name: InsurancePolicyNumber
+                  name: insurancepolicynumber
                   type: VARCHAR
         - addForeignKeyConstraint:
-            baseTableName: Patient
-            baseColumnNames: PersonID
-            referencedTableName: Person
-            referencedColumnNames: ID
+            baseTableName: patient
+            baseColumnNames: personid
+            referencedTableName: person
+            referencedColumnNames: id
             onDelete: CASCADE
             constraintName: fk_patient_person
       rollback:
         - dropTable:
-            tableName: Patient
+            tableName: patient
             cascadeConstraints: true
 
   - changeSet:
       id: 006-create-device
-      author: codex
+      author: Egoroshka999
       changes:
         - createTable:
-            tableName: Device
+            tableName: device
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: SERIAL
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: DeviceSN
+                  name: devicesn
                   type: VARCHAR
                   constraints:
                     nullable: false
                     unique: true
               - column:
-                  name: Location
+                  name: location
                   type: VARCHAR
                   constraints:
                     nullable: false
               - column:
-                  name: Status
-                  type: DeviceStatusEnum
+                  name: status
+                  type: devicestatusenum
                   constraints:
                     nullable: false
       rollback:
         - dropTable:
-            tableName: Device
+            tableName: device
             cascadeConstraints: true
 
   - changeSet:
       id: 007-create-study
-      author: codex
+      author: Egoroshka999
       changes:
         - createTable:
-            tableName: Study
+            tableName: study
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: SERIAL
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: PatientID
+                  name: patientid
                   type: INTEGER
                   constraints:
                     nullable: false
               - column:
-                  name: UserID
+                  name: userid
                   type: INTEGER
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
-                  name: DeviceID
+                  name: deviceid
                   type: INTEGER
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
-                  name: Status
+                  name: status
                   type: VARCHAR(20)
                   defaultValue: Planned
                   constraints:
                     nullable: false
               - column:
-                  name: DicomID
+                  name: dicomid
                   type: VARCHAR
               - column:
-                  name: Notes
+                  name: notes
                   type: TEXT
-        - sql:
-            sql: |
-              ALTER TABLE Study
-              ADD CONSTRAINT chk_study_status
-              CHECK (Status IN ('Planned', 'Canceled', 'Successed'));
         - addForeignKeyConstraint:
-            baseTableName: Study
-            baseColumnNames: PatientID
-            referencedTableName: Patient
-            referencedColumnNames: ID
+            baseTableName: study
+            baseColumnNames: patientid
+            referencedTableName: patient
+            referencedColumnNames: id
             onDelete: CASCADE
             constraintName: fk_study_patient
         - addForeignKeyConstraint:
-            baseTableName: Study
-            baseColumnNames: UserID
-            referencedTableName: UserProfile
-            referencedColumnNames: ID
+            baseTableName: study
+            baseColumnNames: userid
+            referencedTableName: userprofile
+            referencedColumnNames: id
             onDelete: SET NULL
             constraintName: fk_study_user
         - addForeignKeyConstraint:
-            baseTableName: Study
-            baseColumnNames: DeviceID
-            referencedTableName: Device
-            referencedColumnNames: ID
+            baseTableName: study
+            baseColumnNames: deviceid
+            referencedTableName: device
+            referencedColumnNames: id
             onDelete: SET NULL
             constraintName: fk_study_device
       rollback:
         - dropTable:
-            tableName: Study
+            tableName: study
             cascadeConstraints: true
 
   - changeSet:
       id: 008-create-user-role
-      author: codex
+      author: Egoroshka999
       changes:
         - createTable:
-            tableName: UserRole
+            tableName: userrole
             columns:
               - column:
-                  name: UserID
+                  name: userid
                   type: INTEGER
                   constraints:
                     nullable: false
               - column:
-                  name: RoleID
+                  name: roleid
                   type: INTEGER
                   constraints:
                     nullable: false
         - addPrimaryKey:
-            tableName: UserRole
-            columnNames: UserID, RoleID
-            constraintName: UserRole_pkey
+            tableName: userrole
+            columnNames: userid, roleid
+            constraintName: userrole_pkey
         - addForeignKeyConstraint:
-            baseTableName: UserRole
-            baseColumnNames: UserID
-            referencedTableName: UserProfile
-            referencedColumnNames: ID
+            baseTableName: userrole
+            baseColumnNames: userid
+            referencedTableName: userprofile
+            referencedColumnNames: id
             onDelete: CASCADE
             constraintName: fk_user_role_user
         - addForeignKeyConstraint:
-            baseTableName: UserRole
-            baseColumnNames: RoleID
-            referencedTableName: Role
-            referencedColumnNames: ID
+            baseTableName: userrole
+            baseColumnNames: roleid
+            referencedTableName: role
+            referencedColumnNames: id
             onDelete: CASCADE
             constraintName: fk_user_role_role
       rollback:
         - dropTable:
-            tableName: UserRole
+            tableName: userrole
             cascadeConstraints: true
 
   - changeSet:
       id: 009-create-device-comment
-      author: codex
+      author: Egoroshka999
       changes:
         - createTable:
-            tableName: DeviceComment
+            tableName: devicecomment
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: SERIAL
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: DeviceID
+                  name: deviceid
                   type: INTEGER
                   constraints:
                     nullable: false
               - column:
-                  name: UserID
+                  name: userid
                   type: INTEGER
                   constraints:
                     nullable: false
               - column:
-                  name: CommentText
+                  name: commenttext
                   type: TEXT
                   constraints:
                     nullable: false
               - column:
-                  name: Timestamp
+                  name: timestamp
                   type: TIMESTAMP
                   defaultValueComputed: NOW()
                   constraints:
                     nullable: false
         - addForeignKeyConstraint:
-            baseTableName: DeviceComment
-            baseColumnNames: DeviceID
-            referencedTableName: Device
-            referencedColumnNames: ID
+            baseTableName: devicecomment
+            baseColumnNames: deviceid
+            referencedTableName: device
+            referencedColumnNames: id
             onDelete: CASCADE
             constraintName: fk_device_comment_device
         - addForeignKeyConstraint:
-            baseTableName: DeviceComment
-            baseColumnNames: UserID
-            referencedTableName: UserProfile
-            referencedColumnNames: ID
+            baseTableName: devicecomment
+            baseColumnNames: userid
+            referencedTableName: userprofile
+            referencedColumnNames: id
             onDelete: CASCADE
             constraintName: fk_device_comment_user
       rollback:
         - dropTable:
-            tableName: DeviceComment
+            tableName: devicecomment
             cascadeConstraints: true
 
   - changeSet:
       id: 010-create-schedule
-      author: codex
+      author: Egoroshka999
       changes:
         - createTable:
-            tableName: Schedule
+            tableName: schedule
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: SERIAL
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: StartTime
+                  name: starttime
                   type: TIMESTAMP
                   constraints:
                     nullable: false
               - column:
-                  name: EndTime
+                  name: endtime
                   type: TIMESTAMP
                   constraints:
                     nullable: false
               - column:
-                  name: StudyID
+                  name: studyid
+                  type: INTEGER
+                  constraints:
+                    nullable: true
+              - column:
+                  name: scheduledbyuserid
                   type: INTEGER
                   constraints:
                     nullable: false
               - column:
-                  name: ScheduledByUserID
-                  type: INTEGER
-                  constraints:
-                    nullable: false
-              - column:
-                  name: Comments
+                  name: comments
                   type: TEXT
         - addForeignKeyConstraint:
-            baseTableName: Schedule
-            baseColumnNames: StudyID
-            referencedTableName: Study
-            referencedColumnNames: ID
+            baseTableName: schedule
+            baseColumnNames: studyid
+            referencedTableName: study
+            referencedColumnNames: id
             onDelete: SET NULL
             constraintName: fk_schedule_study
         - addForeignKeyConstraint:
-            baseTableName: Schedule
-            baseColumnNames: ScheduledByUserID
-            referencedTableName: UserProfile
-            referencedColumnNames: ID
+            baseTableName: schedule
+            baseColumnNames: scheduledbyuserid
+            referencedTableName: userprofile
+            referencedColumnNames: id
             onDelete: CASCADE
             constraintName: fk_schedule_user
       rollback:
@@ -293,58 +288,55 @@ databaseChangeLog:
 
   - changeSet:
       id: 011-create-audit-log
-      author: codex
+      author: Egoroshka999
       changes:
         - createTable:
-            tableName: AuditLog
+            tableName: auditlog
             columns:
               - column:
-                  name: ID
+                  name: id
                   type: SERIAL
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: UserID
+                  name: userid
                   type: INTEGER
                   constraints:
                     nullable: false
               - column:
-                  name: ActionType
-                  type: ActionTypeEnum
+                  name: actiontype
+                  type: actiontypeenum
                   constraints:
                     nullable: false
               - column:
-                  name: Entity
+                  name: entity
                   type: VARCHAR
                   constraints:
                     nullable: false
               - column:
-                  name: EntityID
+                  name: entityid
                   type: INTEGER
                   constraints:
                     nullable: false
               - column:
-                  name: Timestamp
+                  name: timestamp
                   type: TIMESTAMP
                   defaultValueComputed: NOW()
                   constraints:
                     nullable: false
               - column:
-                  name: Details
+                  name: details
                   type: TEXT
         - addForeignKeyConstraint:
-            baseTableName: AuditLog
-            baseColumnNames: UserID
-            referencedTableName: UserProfile
-            referencedColumnNames: ID
+            baseTableName: auditlog
+            baseColumnNames: userid
+            referencedTableName: userprofile
+            referencedColumnNames: id
             onDelete: CASCADE
             constraintName: fk_audit_log_user
       rollback:
-        - sql:
-            sql: |
-              ALTER TABLE Study DROP CONSTRAINT IF EXISTS chk_study_status;
         - dropTable:
-            tableName: AuditLog
+            tableName: auditlog
             cascadeConstraints: true
