@@ -4,7 +4,6 @@ import com.amogus.server.models.Userprofile;
 import com.amogus.server.payload.response.UserWithRolesResponse;
 import com.amogus.server.services.UserService;
 import com.amogus.server.services.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,6 @@ public class UserController {
     private final UserService userService;
     private final PersonService personService;
 
-    @Autowired
     public UserController(UserService userService, PersonService personService) {
         this.userService = userService;
         this.personService = personService;

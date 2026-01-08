@@ -5,7 +5,6 @@ import com.amogus.server.models.Patient;
 import com.amogus.server.models.Person;
 import com.amogus.server.services.PatientService;
 import com.amogus.server.services.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,6 @@ public class PatientController {
     private final PatientService patientService;
     private final PersonService personService;
 
-    @Autowired
     public PatientController(PatientService patientService, PersonService personService) {
         this.patientService = patientService;
         this.personService = personService;

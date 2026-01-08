@@ -5,7 +5,6 @@ import com.amogus.server.models.Study;
 import com.amogus.server.payload.response.StudyDataResponse;
 import com.amogus.server.payload.response.StudyResponse;
 import com.amogus.server.services.StudyService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,8 +19,11 @@ import java.time.LocalDate;
 @RequestMapping("/api/studies")
 public class StudyController {
 
-    @Autowired
-    private StudyService studyService;
+    private final StudyService studyService;
+
+    public StudyController(StudyService studyService) {
+        this.studyService = studyService;
+    }
 
     @GetMapping
     public ResponseEntity<Page<StudyResponse>> getAllStudies(

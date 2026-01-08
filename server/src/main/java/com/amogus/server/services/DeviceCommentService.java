@@ -4,7 +4,6 @@ import com.amogus.server.models.Device;
 import com.amogus.server.models.DeviceComment;
 import com.amogus.server.models.Userprofile;
 import com.amogus.server.repositories.DeviceCommentsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -16,7 +15,6 @@ public class DeviceCommentService {
 
     private final DeviceCommentsRepository deviceCommentRepository;
 
-    @Autowired
     public DeviceCommentService(DeviceCommentsRepository deviceCommentRepository) {
         this.deviceCommentRepository = deviceCommentRepository;
     }

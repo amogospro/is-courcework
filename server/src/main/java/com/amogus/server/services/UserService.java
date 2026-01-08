@@ -7,7 +7,6 @@ import com.amogus.server.models.Userprofile;
 import com.amogus.server.repositories.RoleRepository;
 import com.amogus.server.repositories.UserProfileRepository;
 import com.amogus.server.repositories.UserRoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,16 +15,17 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserProfileRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    UserRoleRepository userRoleRepository;
-
-    @Autowired
-    public UserService(UserProfileRepository userRepository) {
+    public UserService(
+            UserProfileRepository userRepository,
+            RoleRepository roleRepository,
+            UserRoleRepository userRoleRepository
+    ) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
     public Page<Userprofile> getAllUsers(Pageable pageable) {

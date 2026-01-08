@@ -6,7 +6,6 @@ import com.amogus.server.models.Userprofile;
 import com.amogus.server.security.CustomUserDetails;
 import com.amogus.server.services.DeviceCommentService;
 import com.amogus.server.services.DeviceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +22,6 @@ public class DeviceCommentController {
     private final DeviceCommentService deviceCommentService;
     private final DeviceService deviceService;
 
-    @Autowired
     public DeviceCommentController(DeviceCommentService deviceCommentService, DeviceService deviceService) {
         this.deviceCommentService = deviceCommentService;
         this.deviceService = deviceService;

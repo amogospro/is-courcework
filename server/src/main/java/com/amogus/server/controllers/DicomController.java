@@ -2,7 +2,6 @@ package com.amogus.server.controllers;
 
 import com.amogus.server.services.OrthancService;
 import jakarta.websocket.server.PathParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +15,11 @@ import java.util.Map;
 @RequestMapping("/api/dicom")
 public class DicomController {
 
-    @Autowired
-    private OrthancService orthancService;
+    private final OrthancService orthancService;
+
+    public DicomController(OrthancService orthancService) {
+        this.orthancService = orthancService;
+    }
 
     @PostMapping("/upload/{id}")
     @PreAuthorize("hasAuthority('Врач')")

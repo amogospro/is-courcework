@@ -9,7 +9,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -20,8 +19,11 @@ import java.time.Instant;
 @Component
 public class AuditAspect {
 
-    @Autowired
-    private AuditLogService auditLogService;
+    private final AuditLogService auditLogService;
+
+    public AuditAspect(AuditLogService auditLogService) {
+        this.auditLogService = auditLogService;
+    }
 
     // Define a pointcut for repository save methods, excluding AuditLogRepository
     @Pointcut("execution(* org.springframework.data.repository.Repository+.*(..)) && " +

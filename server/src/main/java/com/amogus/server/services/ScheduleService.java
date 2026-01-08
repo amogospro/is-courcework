@@ -9,7 +9,6 @@ import com.amogus.server.payload.response.ScheduleResponse;
 import com.amogus.server.repositories.ScheduleRepository;
 import com.amogus.server.repositories.StudyRepository;
 import com.amogus.server.repositories.UserProfileRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,12 +19,19 @@ import java.util.stream.Collectors;
 @Service
 public class ScheduleService {
 
-    @Autowired
-    private ScheduleRepository scheduleRepository;
-    @Autowired
-    private StudyRepository studyRepository;
-    @Autowired
-    private UserProfileRepository userRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final StudyRepository studyRepository;
+    private final UserProfileRepository userRepository;
+
+    public ScheduleService(
+            ScheduleRepository scheduleRepository,
+            StudyRepository studyRepository,
+            UserProfileRepository userRepository
+    ) {
+        this.scheduleRepository = scheduleRepository;
+        this.studyRepository = studyRepository;
+        this.userRepository = userRepository;
+    }
 
     public List<ScheduleResponse> getSchedules(Instant start, Instant end, Userprofile user) {
 

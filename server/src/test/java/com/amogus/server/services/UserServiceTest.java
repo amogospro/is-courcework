@@ -36,9 +36,7 @@ class UserServiceTest {
 
     @BeforeEach
     void initService() {
-        userService = new UserService(userRepository);
-        userService.roleRepository = roleRepository;
-        userService.userRoleRepository = userRoleRepository;
+        userService = new UserService(userRepository, roleRepository, userRoleRepository);
     }
 
     @Test
