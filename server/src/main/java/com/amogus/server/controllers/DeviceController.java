@@ -7,7 +7,6 @@ import com.amogus.server.payload.response.DeviceResponse;
 import com.amogus.server.security.CustomUserDetails;
 import com.amogus.server.services.DeviceService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,6 @@ public class DeviceController {
 
     private final DeviceService deviceService;
 
-    @Autowired
     public DeviceController(DeviceService deviceService) {
         this.deviceService = deviceService;
     }

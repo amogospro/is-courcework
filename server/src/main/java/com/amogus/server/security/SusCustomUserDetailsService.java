@@ -2,7 +2,6 @@ package com.amogus.server.security;
 
 import com.amogus.server.models.Userprofile;
 import com.amogus.server.repositories.UserProfileRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 public class SusCustomUserDetailsService implements UserDetailsService {
     private final UserProfileRepository userProfileRepository;
 
-    @Autowired
     public SusCustomUserDetailsService(UserProfileRepository userProfileRepository) {
         this.userProfileRepository = userProfileRepository;
     }

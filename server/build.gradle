@@ -3,6 +3,8 @@ plugins {
     id 'org.springframework.boot' version '3.4.0'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'jacoco'
+    id 'org.owasp.dependencycheck' version '12.1.9'
+    id 'com.github.spotbugs' version '6.4.8'
 }
 
 group = 'com.amogus'
@@ -20,6 +22,15 @@ configurations {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'org.apache.commons:commons-lang3:3.18.0'
+        force 'org.apache.httpcomponents.client5:httpclient5:5.4.3'
+        force 'org.apache.tomcat.embed:tomcat-embed-core:10.1.47'
+        force 'org.apache.tomcat.embed:tomcat-embed-websocket:10.1.47'
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -29,12 +40,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    implementation 'org.postgresql:postgresql'
+    implementation 'org.postgresql:postgresql:42.7.7'
     implementation 'org.liquibase:liquibase-core'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+    implementation 'org.webjars:swagger-ui:5.20.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
@@ -47,7 +59,7 @@ dependencies {
     // Observability
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-prometheus'
-    implementation 'net.ttddyy.observation:datasource-micrometer-spring-boot:1.0.4'
+    implementation 'net.ttddyy.observation:datasource-micrometer-spring-boot:1.0.6'
 
     // JWT Library
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -64,6 +76,17 @@ dependencies {
 
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // SpotBugs + FindSecBugs
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
+    spotbugs 'com.github.spotbugs:spotbugs:4.8.6'
+    spotbugs 'org.apache.commons:commons-lang3:3.18.0'
+    spotbugs 'org.apache.httpcomponents.client5:httpclient5:5.4.3'
+
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.4.3'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.47'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-websocket:10.1.47'
 }
 
 tasks.named('test') {
@@ -117,4 +140,65 @@ tasks.jacocoTestCoverageVerification {
 
 tasks.check {
     dependsOn tasks.jacocoTestCoverageVerification
+    dependsOn tasks.dependencyCheckAnalyze
+    dependsOn tasks.spotbugsMain
+    dependsOn tasks.spotbugsTest
+    dependsOn 'spotbugsHighSecurityCheck'
+}
+
+def nvdApiKey = System.getenv('NVD_API_KEY')
+
+dependencyCheck {
+    failBuildOnCVSS = 7.0
+    nvd {
+        apiKey = nvdApiKey
+        delay = 16000
+    }
+}
+
+tasks.named('dependencyCheckAnalyze') {
+    doFirst {
+        if (nvdApiKey == null || nvdApiKey.trim().isEmpty()) {
+            throw new GradleException('NVD_API_KEY is required for OWASP Dependency-Check. Set it in your environment before running Gradle.')
+        }
+    }
+}
+
+spotbugs {
+    toolVersion = '4.8.6'
+    effort.set(com.github.spotbugs.snom.Effort.MAX)
+    reportLevel.set(com.github.spotbugs.snom.Confidence.valueOf('LOW'))
+}
+
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask).configureEach {
+    extraArgs.add('-high')
+    reports {
+        html.required = true
+        xml.required = true
+    }
+}
+
+tasks.named('spotbugsMain', com.github.spotbugs.snom.SpotBugsTask) {
+    auxClassPaths.from(sourceSets.main.runtimeClasspath)
+    auxClassPaths.from(files("${System.getProperty('java.home')}/lib/jrt-fs.jar"))
+}
+
+tasks.named('spotbugsTest', com.github.spotbugs.snom.SpotBugsTask) {
+    auxClassPaths.from(sourceSets.test.runtimeClasspath)
+    auxClassPaths.from(files("${System.getProperty('java.home')}/lib/jrt-fs.jar"))
+}
+
+tasks.register('spotbugsHighSecurityCheck') {
+    dependsOn tasks.spotbugsMain
+    doLast {
+        def reportFile = file("$buildDir/reports/spotbugs/main.xml")
+        if (!reportFile.exists()) {
+            throw new GradleException("SpotBugs report not found at ${reportFile}.")
+        }
+        def reportText = reportFile.getText('UTF-8')
+        def matcher = reportText =~ /<BugInstance[^>]*category=\"SECURITY\"[^>]*priority=\"1\"/
+        if (matcher.find()) {
+            throw new GradleException("SpotBugs reported HIGH severity security issues. See $buildDir/reports/spotbugs/main.html")
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package com.amogus.server.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,15 +31,17 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private SusCustomUserDetailsService userDetailsService;
+    private final SusCustomUserDetailsService userDetailsService;
+    private final JwtUtils jwtUtils;
 
-    @Autowired
-    private JwtUtils jwtUtils;
+    public SecurityConfig(SusCustomUserDetailsService userDetailsService, JwtUtils jwtUtils) {
+        this.userDetailsService = userDetailsService;
+        this.jwtUtils = jwtUtils;
+    }
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
+        return new JwtAuthenticationFilter(jwtUtils, userDetailsService);
     }
 
     @Bean

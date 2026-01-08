@@ -2,7 +2,6 @@ package com.amogus.server.services;
 
 import com.amogus.server.models.Person;
 import com.amogus.server.repositories.PersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +12,6 @@ public class PersonService {
 
     private final PersonRepository personRepository;
 
-    @Autowired
     public PersonService(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }

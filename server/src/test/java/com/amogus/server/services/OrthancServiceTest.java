@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +42,7 @@ class OrthancServiceTest {
         Study study = new Study();
         study.setId(1);
         when(studyService.getStudyById(1)).thenReturn(study);
-        when(multipartFile.getBytes()).thenReturn("bytes".getBytes());
+        when(multipartFile.getBytes()).thenReturn("bytes".getBytes(StandardCharsets.UTF_8));
         when(restTemplate.postForObject(anyString(), any(), eq(Map.class)))
                 .thenReturn(Map.of("ParentStudy", "dicom-id"));
 
@@ -73,13 +74,13 @@ class OrthancServiceTest {
         study.setId(2);
         study.setDicomid("dicom-id");
         when(studyService.getStudyById(2)).thenReturn(study);
-        when(restTemplate.getForObject(anyString(), eq(byte[].class))).thenReturn("archive".getBytes());
+        when(restTemplate.getForObject(anyString(), eq(byte[].class))).thenReturn("archive".getBytes(StandardCharsets.UTF_8));
 
         // When
         byte[] bytes = orthancService.downloadDicomArchive(2);
 
         // Then
-        assertThat(bytes).isEqualTo("archive".getBytes());
+        assertThat(bytes).isEqualTo("archive".getBytes(StandardCharsets.UTF_8));
         verify(restTemplate).getForObject(contains("/studies/dicom-id/archive"), eq(byte[].class));
     }
 }

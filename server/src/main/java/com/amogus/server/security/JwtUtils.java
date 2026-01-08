@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
@@ -18,7 +19,7 @@ public class JwtUtils {
             @Value("${jwt.secret}") String jwtSecret,
             @Value("${jwt.expirationMs}") long jwtExpirationMs
     ) {
-        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
         this.jwtExpirationMs = jwtExpirationMs;
     }
 

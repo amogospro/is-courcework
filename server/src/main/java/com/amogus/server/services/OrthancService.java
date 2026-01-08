@@ -3,7 +3,6 @@ package com.amogus.server.services;
 import com.amogus.server.models.Study;
 import com.amogus.server.repositories.StudyRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,14 +18,17 @@ import java.util.Map;
 @Service
 public class OrthancService {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     private final String orthancBaseUrl = "http://localhost:8042"; // Adjust as necessary
-    @Autowired
-    private StudyService studyService;
-    @Autowired
-    private StudyRepository studyRepository;
+    private final StudyService studyService;
+    private final StudyRepository studyRepository;
+
+    public OrthancService(RestTemplate restTemplate, StudyService studyService, StudyRepository studyRepository) {
+        this.restTemplate = restTemplate;
+        this.studyService = studyService;
+        this.studyRepository = studyRepository;
+    }
 
     @Transactional
     public String uploadDicom(MultipartFile file, Integer studyId) throws IOException {

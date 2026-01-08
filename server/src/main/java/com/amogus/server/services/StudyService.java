@@ -8,7 +8,6 @@ import com.amogus.server.repositories.DeviceRepository;
 import com.amogus.server.repositories.PatientRepository;
 import com.amogus.server.repositories.StudyRepository;
 import com.amogus.server.repositories.UserProfileRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,14 +18,22 @@ import java.time.LocalDate;
 @Service
 public class StudyService {
 
-    @Autowired
-    private StudyRepository studyRepository;
-    @Autowired
-    private PatientRepository patientRepository;
-    @Autowired
-    private UserProfileRepository userRepository;
-    @Autowired
-    private DeviceRepository deviceRepository;
+    private final StudyRepository studyRepository;
+    private final PatientRepository patientRepository;
+    private final UserProfileRepository userRepository;
+    private final DeviceRepository deviceRepository;
+
+    public StudyService(
+            StudyRepository studyRepository,
+            PatientRepository patientRepository,
+            UserProfileRepository userRepository,
+            DeviceRepository deviceRepository
+    ) {
+        this.studyRepository = studyRepository;
+        this.patientRepository = patientRepository;
+        this.userRepository = userRepository;
+        this.deviceRepository = deviceRepository;
+    }
 
     public Page<StudyResponse> getAllStudies(Pageable pageable, String patientName, String doctorName, LocalDate date) {
         Specification<Study> spec = Specification.where(StudySpecifications.hasPatientName(patientName))

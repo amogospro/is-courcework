@@ -6,7 +6,6 @@ import com.amogus.server.payload.request.ScheduleRequest;
 import com.amogus.server.payload.response.ScheduleResponse;
 import com.amogus.server.security.CustomUserDetails;
 import com.amogus.server.services.ScheduleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +17,11 @@ import java.util.List;
 @RequestMapping("/api/schedules")
 public class ScheduleController {
 
-    @Autowired
-    private ScheduleService scheduleService;
+    private final ScheduleService scheduleService;
+
+    public ScheduleController(ScheduleService scheduleService) {
+        this.scheduleService = scheduleService;
+    }
 
     @GetMapping
     public ResponseEntity<List<ScheduleResponse>> getAllSchedules(

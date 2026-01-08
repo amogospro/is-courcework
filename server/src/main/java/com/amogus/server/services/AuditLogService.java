@@ -5,7 +5,6 @@ import com.amogus.server.models.Userprofile;
 import com.amogus.server.payload.response.AuditLogResponse;
 import com.amogus.server.repositories.AuditLogRepository;
 import com.amogus.server.security.CustomUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -17,11 +16,13 @@ import java.time.Instant;
 @Service
 public class AuditLogService {
 
-    @Autowired
-    private AuditLogRepository auditLogRepository;
+    private final AuditLogRepository auditLogRepository;
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
+    public AuditLogService(AuditLogRepository auditLogRepository, UserService userService) {
+        this.auditLogRepository = auditLogRepository;
+        this.userService = userService;
+    }
 
     public void createAuditLog(Object entity, String actionType) {
         try {
